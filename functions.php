@@ -526,6 +526,21 @@
 			return false;
 		}
 
+		//admin only
+		function display_returns()
+		{
+
+		}
+
+		//admin only
+		function approve_return()
+		{
+			//add to RETURNS table (archive purpose)
+			//move item back to inventory table
+			//give user money back
+			//remove from orders table
+		}
+
 		function update_cart_count($user_id, $item_id, $new_amount)
 		{
 			$updateQ = "UPDATE ".SHOPCART_TABLE." SET amount = '$new_amount' WHERE user_id = '$user_id' AND item_id = '$item_id'";
@@ -551,6 +566,40 @@
 			$selectResult = $this->conn->query($selectQ);
 
 			var_dump ($selectResult);
+		}
+
+		//WISHLIST
+		function insert_wishlist($user_id, $item_id)
+		{
+			//check if it already exists
+			$selectQ = "SELECT item_id FROM ".WISHLIST_TABLE." WHERE user_id = '$user_id'";
+			$selectResult = $this->conn->query($selectQ);
+			$itemMatch = mysqli_fetch_assoc($selectResult);
+
+			if ($itemMatch->num_rows == 0)
+			{
+				$insertQ = "INSERT INTO ".WISHLIST_TABLE." (user_id, item_id) VALUES ('$user_id', '$item_id')";
+				$this->conn->query($insertQ);
+				return true;
+			}
+
+			//return false if its already in wishlist
+			return false;
+		}
+
+		//return list of item_id's for a user
+		function display_wishlist($user_id)
+		{
+			$selectQ = "SELECT item_id FROM ".WISHLIST_TABLE." WHERE user_id = '$user_id'";
+			$selectResult = $this->conn->query($selectQ);
+
+			$wishlist_arr = array();
+			while($table_row = $selectResult->fetch_assoc())
+			{
+				array_push($wishlist_arr, $table_row);
+			}
+
+			return $wishlist_arr;
 		}
 	}
 
