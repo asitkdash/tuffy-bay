@@ -606,4 +606,5 @@
 
 
 	$tuffy_user = new tuffy_user($DB_connection);
+	$tuffy_inventory = new tuffy_inventory($DB_connection);
 ?>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php 
 	include 'functions.php';
 
@@ -38,7 +39,7 @@
 		$tuffy_inventory->return_request($_POST['order_id']);
 		header("Refresh:0");
 	}
-	include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_header.phtml';
+	include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 ?>
 
 <div class="container-fluid">
@@ -139,6 +140,5 @@
 
 <?php 
 	$js_files = array();
-	include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_footer.phtml';
+	include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_footer.php';
 ?>
-
