@@ -1,9 +1,5 @@
 <?php
 include 'functions.php';
-$title = ''; # Enter title of page
-$css_files = array(
-  'bootstrap.min.css'
-);
 $tuffy_inventory = new tuffy_inventory($DB_connection);
 
 
@@ -11,8 +7,10 @@ if (isset($_POST['search_item']))
 {
     $search_result = $tuffy_inventory->search_item($_POST['search_input']);
 }
-
-include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_header.phtml';
+//HEADER
+$title = 'Tuffy Bay';
+$css_files = array();
+include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 ?>
 
 <!--SEARCH BAR-->
@@ -52,8 +50,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_header.phtml';
 
 
 <?php
-$js_files = array(
-  # put js files here
-);
-include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_footer.phtml';
+$js_files = array();
+include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_footer.php';
 ?>

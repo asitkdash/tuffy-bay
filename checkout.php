@@ -63,7 +63,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 <div class="checkout">
 	 <div class="container">
 		 <ol class="breadcrumb">
-		  <li><a href="index.html">Home</a></li>
+		  <li><a href="index.php">Home</a></li>
 		  <li class="active">Cart</li>
 		 </ol>
 		 <div class="col-md-9 product-price1">
@@ -167,7 +167,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 				Not enough in stock
 			<?php endif; ?>
 	 	</div>
-	 	
 </div>
 
 <?php

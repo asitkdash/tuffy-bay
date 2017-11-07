@@ -47,13 +47,12 @@ else if (isset($_POST['add_credit_card']))
 	$tuffy_user->insert_card_info($_SESSION['user']['id'], $card_num, $security_code);
 }
 
-$title = 'manage user info'; # Enter title of page
-$css_files = array(
-  "bootstrap.min.css"
-);
-include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_header.phtml';
+$title = 'Tuffy Bay';
+$css_files = array();
+include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 ?>
 
+<div class="container">
 <h3>change email</h3>
 <form method="post">
 	<label>New email adress: </label>
@@ -121,10 +120,9 @@ echo "credit info: ";
 	MONEY: <?php echo $_SESSION['user']['money'] ?>
 
 </div>
+</div>
 
 <?php
-	$js_files = array(
-	  "cart.js"
-	); 
-	include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_footer.phtml'; 
+  $js_files = array();
+  include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_footer.php';
 ?>
