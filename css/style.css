@@ -1720,7 +1720,7 @@ h4.last-price{
  width:25%;
  float:right;
 }
-a.order {
+a.order, button.order {
   background:#333;
   padding: 10px 1.5em;
   border-radius: 7px;
@@ -1736,7 +1736,9 @@ a.order {
   width: 85%;
   margin: 3em auto 0 auto;
 }
-a.order:hover{
+a.order:hover, button.order:hover{
+	transition: all .4s ease;
+	-webkit-transition: all .4s ease;
 	background:#00a0dc;
 }
 .total-item{
@@ -2328,7 +2330,7 @@ a.add-cart {
   margin-top: 2.8em;
   padding:1em;
 }
-a.order {
+a.order, button.order {
   font-size: 0.9em;
 }
 .price-details span{

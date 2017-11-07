@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php 
 	include 'functions.php';
 
@@ -11,7 +10,7 @@
 	
 	$tuffy_inventory = new tuffy_inventory($DB_connection);
 	$title = 'Success purchase'; # Enter title of page
-	$css_files = array('bootstrap.min.css');
+	$css_files = array('bootstrap.css');
 
 
 	$in_delivery_orders = array();

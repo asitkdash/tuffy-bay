@@ -16,30 +16,7 @@ $not_enough_money = true;
 
 if (isset($_POST['order_cart']))
 {
-	$payment_used = "tuffy money";
-	$tuffy_inventory->purchase_cart($_SESSION['user']['id'], $cart, $_POST['total_price'], $payment_used);
-	if (!$tuffy_inventory->not_enough_money)
-	{
-		header("Location: http://" .$_SERVER['SERVER_NAME'] . "/orders.php");
-		exit;
-	}
-}
-else if (isset($_POST['use_credit_card']))
-{
-	if (isset($_POST['using_account_card']))
-	{
-		$card_num = $_SESSION['user']['credit_card_num'];
-		$last4 = substr($card_num, -4);
-		$payment_used = "credit card **** **** **** ".$last4;
-	}
-	else
-	{
-		$security_code = $_POST['security_code'];
-		$card_num = $_POST['creditCard1'] . $_POST['creditCard2'] . $_POST['creditCard3'] . $_POST['creditCard4'];
-		$payment_used = "credit card **** **** **** ".$_POST['creditCard4'];
-	}
-
-	$tuffy_inventory->purchase_cart($_SESSION['user']['id'], $cart, $_POST['total_price'], $payment_used);
+	$tuffy_inventory->purchase_cart($_SESSION['user']['id'], $cart, $_POST['total_price'], $_POST['payment_method']);
 	header("Location: http://" .$_SERVER['SERVER_NAME'] . "/orders.php");
 	exit;
 }
@@ -81,7 +58,17 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 						  </ul>
 						  <?php foreach($cart as $item): ?>
 
-						  <ul class="cart-header">
+						  	<?php 
+							$total_price += $item['price'] * $item['in_cart_count'];
+
+						    if ($item['in_cart_count'] > $item['stock_count'])
+						    {
+						      $not_enough_stock = true;
+						    }
+
+						    ?>
+
+						  <ul class="cart-header" style="border-bottom: 2px solid #eee;">
 						   
 							<li class="ring-in"><a href="single.html" ><img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/A_blank_flag.png" class="img-responsive" alt=""></a>
 							</li>
@@ -89,26 +76,24 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 							<li><span>$<?php echo $item['price']; ?></span></li>
 							<li>
 								<span>
+								<form method = "post">
+									<input hidden type="number" name="item_id" value = "<?php echo $item['id']; ?>">
 									<input type="number" name="quantity" min="1" value = "<?php echo $item['in_cart_count']; ?>">
 									<button style="margin-top: 5px;" type = "submit" name = "update_quan">update</button>
-									<button style="margin-top: 5px;" type ="submit" name = "delete_shop_item">delete</button>
+									<button style="margin-top: 5px;" type = "submit" name = "delete_shop_item">delete</button>
+								</form>
 								</span>
 							</li>
-    						<input hidden type="number" name="item_id" value = "<?php echo $item['id']; ?>">
 							<div class="clearfix"> </div>
-							</ul>
 
 							<?php 
-							$total_price += $item['price'] * $item['in_cart_count'];
+							if ($item['in_cart_count'] > $item['stock_count'])
+							{
+							echo "<div style='font-size: 12px;padding-top:15px;color:red'>(CANNOT PURCHASE: we currently only have ".$item['stock_count']." of these in stock)</div>";
+							}
+							?>
 
-						    if ($item['in_cart_count'] > $item['stock_count'])
-						    {
-						      $not_enough_stock = true;
-						      echo "<span style='color:red'>(CANNOT PURCHASE: we currently only have ".$item['stock_count']." of these in stock)</span>";
-						    }
-
-						    ?>
-
+							</ul>
 							<?php endforeach; ?>
 					 </div>
 				  </div>
@@ -137,34 +122,34 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 			 <h4 class="last-price">TOTAL</h4>
 			 <span class="total final" id="final-price">$<?php echo $total_price; ?></span>
 			 <div class="clearfix"></div>
-			 <a class="order" href="#">Place Order</a>
-
-			 <br>
-			 <h4>Choose payment method: </h4>
-			 <br>
 			<?php if (!$not_enough_stock): ?>
 			<form method = "post">
+
+				<button class="order" type = "submit" name = "order_cart" style = "border:none">Place Order</button>
+				<br>
+				<h4>Choose payment method: </h4>
+				<br>
 
 				<!--buying with tuffy money-->
 				<?php if ($not_enough_money): ?>
 		 		<input type="radio" disabled> Tuffy Money <span style = "color:#b72626">(not enough money)</span>
 		 		<div style = "padding-left:17px;"><a style = "color: #8ba1c4" href="/manage_user.php">Add more</a></div>
 		 		<?php else:?>
-		 		<input type="radio" name="buy_with_tuffy" > Tuffy Money
+		 		<input type="radio" name="payment_method" value = "tuffy money" required> Tuffy Money
 		 		<?php endif; ?>
 
 		 		<br>
 		 		<!--buying with credit card-->
-		 		<?php if (isset($_SESSION['user']['credit_card_num'])): ?>
-		 		<input type="radio" name="buy_with_card"> Use credit card: <?php echo "**** **** **** ".$last4display; ?>
-		 		<?php else: ?>
+		 		<?php if (!isset($_SESSION['user']['credit_card_num'])): ?>
 		 		<input type="radio" disabled> Use credit card: <span style = "color:#b72626">(no card in account)</span>
 		 		<div style = "padding-left:17px;"><a href="/manage_user.php" style = "color: #8ba1c4">add a card</a></div>
+		 		<?php else: ?>
+		 		<input type="radio" name="payment_method" value = "credit card: **** **** **** <?php echo $last4display; ?>" required> Use credit card: <?php echo "**** **** **** ".$last4display; ?>
 		 		<?php endif; ?>
 
 		 	</form>
 			<?php else: ?>
-				Not enough in stock
+			Not enough in stock
 			<?php endif; ?>
 	 	</div>
 </div>

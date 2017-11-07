@@ -412,8 +412,6 @@
 			$selectQ = "SELECT * FROM ".SHOPCART_TABLE." WHERE user_id = '$user_id'";
 			$selectResult = $this->conn->query($selectQ);
 
-			if ($selectResult->num_rows == 0){return false;}
-
 			$shopcart_arr = array();
 			while($table_row = $selectResult->fetch_assoc())
 			{
@@ -436,15 +434,15 @@
 		public $not_enough_money = false;
 
 		//$items is an array of items with their info, return false if not enough stock
-		function purchase_cart($user_id, $items, $total, $payment_used)
+		function purchase_cart($user_id, $items, $total, $payment_method)
 		{
 			//get user money
 			$selectQ = "SELECT money FROM ".USERS_TABLE." WHERE id = '$user_id'";
 			$selectResult = $this->conn->query($selectQ);
 			$user_info = mysqli_fetch_assoc($selectResult);			
 
-			//if not enough money
-			if ($total > $user_info['money'] && !isset($_POST['use_credit_card']))
+			//if not enough money using tuffy money
+			if ($total > $user_info['money'] && $payment_method == "tuffy money")
 			{
 				$this->not_enough_money = true;
 				return false;
@@ -470,7 +468,7 @@
 				$this->conn->query($deleteQ);
 
 				//add to orders table
-				$this->insert_order($user_id, $item, $payment_used);
+				$this->insert_order($user_id, $item, $payment_method);
 
 				//decrease user money
 				if(!isset($_POST['use_credit_card']))
@@ -485,7 +483,7 @@
 
 
 		//ORDERS
-		function insert_order($user_id, $item, $payment_used)
+		function insert_order($user_id, $item, $payment_method)
 		{
 			$item_id = $item['id'];
 			$item_name = $item['name'];
@@ -498,7 +496,7 @@
 
 			$insertQ = "INSERT INTO ".ORDERS_TABLE." 
 						(user_id, inventory_id, name, amount, price, description, date_ordered, payment_used) 
-						VALUES ('$user_id', '$item_id', '$item_name', '$item_amt', '$item_price', '$item_desc', '$curr_time', '$payment_used')";
+						VALUES ('$user_id', '$item_id', '$item_name', '$item_amt', '$item_price', '$item_desc', '$curr_time', '$payment_method')";
 
 			$insertResult = $this->conn->query($insertQ);
 		}
