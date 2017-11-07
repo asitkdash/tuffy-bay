@@ -236,10 +236,13 @@
 			$selectQ = "SELECT password FROM ".USERS_TABLE." WHERE id = '$user_id'";
 			$selectResult = $this->conn->query($selectQ);
 			$user_info = mysqli_fetch_assoc($selectResult);
+			echo $selectQ;
 
-			//check if current password matches (TODO: i think need to check using password_needs_rehash(); )
+			echo $user_info['password'];
+			//check if current password matches (TODO: i think need to use password_needs_rehash(); )
 			if(password_verify($curr_password, $user_info['password']))
 			{
+				echo "hi";
 				$hashed_pass = password_hash($new_password, PASSWORD_DEFAULT);
 
 				$updateQ = "UPDATE ".USERS_TABLE." SET password = '$hashed_pass' WHERE id = '$user_id'";
@@ -431,6 +434,15 @@
 			return $shopcart_arr;
 		}
 
+		function get_cart_count($user_id)
+		{
+			$selectQ = "SELECT COUNT(*) FROM ".SHOPCART_TABLE." WHERE user_id = '$user_id'";
+			$selectResult = $this->conn->query($selectQ);
+			
+			$cart_count = mysqli_fetch_assoc($selectResult);
+			return $cart_count;
+		}
+
 		public $not_enough_money = false;
 
 		//$items is an array of items with their info, return false if not enough stock
@@ -439,7 +451,9 @@
 			//get user money
 			$selectQ = "SELECT money FROM ".USERS_TABLE." WHERE id = '$user_id'";
 			$selectResult = $this->conn->query($selectQ);
-			$user_info = mysqli_fetch_assoc($selectResult);			
+			$user_info = mysqli_fetch_assoc($selectResult);	
+			echo $user_info['money'];
+			echo $total;		
 
 			//if not enough money using tuffy money
 			if ($total > $user_info['money'] && $payment_method == "tuffy money")
@@ -471,8 +485,9 @@
 				$this->insert_order($user_id, $item, $payment_method);
 
 				//decrease user money
-				if(!isset($_POST['use_credit_card']))
+				if($payment_method == "tuffy money")
 				{
+					echo "hi";
 					$new_user_money = $user_info['money'] - $total;
 					$updateMoney = "UPDATE ".USERS_TABLE." SET money = '$new_user_money' WHERE id = ".$user_id;
 					$this->conn->query($updateMoney);
@@ -556,14 +571,6 @@
 
 			if ($deleteResult){return true;}
 			return false;
-		}
-
-		function get_cart_count($user_id, $item_id)
-		{
-			$selectQ = "SELECT COUNT(*) FROM ".SHOPCART_TABLE." WHERE user_id = '$user_id' AND item_id = '$item_id'";
-			$selectResult = $this->conn->query($selectQ);
-
-			var_dump ($selectResult);
 		}
 
 		//WISHLIST

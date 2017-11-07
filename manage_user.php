@@ -10,31 +10,7 @@ if(!$tuffy_user->is_loggedin())
 
 $user_id = $_SESSION['user']['id'];
 
-if (isset($_POST['change_email']))
-{
-	$email_updated = $tuffy_user->update_email($user_id, $_POST['new_email']);
-	if (!$email_updated)
-	{
-		$msg = "email already used";
-	}
-	else
-	{
-		$msg = "successfully updated email";
-	}
-}
-else if (isset($_POST['change_password']))
-{
-	$password_updated = $tuffy_user->update_password($user_id, $_POST['curr_password'], $_POST['new_password']);
-	if (!$password_updated)
-	{
-		$msg = "password doesn't match or SQL error";
-	}
-	else
-	{
-		$msg = "successfully updated password";
-	}
-}
-else if (isset($_POST['money_to_add']))
+if (isset($_POST['money_to_add']))
 {
 	$money_updated = $tuffy_user->add_money($user_id, $_POST['money_to_add']);
 	if ($money_updated){ $msg = "$".$_POST['money_to_add']." has been added to balance"; }
@@ -48,79 +24,64 @@ else if (isset($_POST['add_credit_card']))
 }
 
 $title = 'Tuffy Bay';
-$css_files = array();
+$css_files = array('bootstrap.css');
 include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 ?>
 
-<div class="container">
-<h3>change email</h3>
-<form method="post">
-	<label>New email adress: </label>
-	<input type="text" name="new_email">
+<div class = "container">
+	<div class = "row">
+		<div class = "col-xs-3"></div>
+		<div class = "col-xs-6" style = "background: #fff;padding: 10px 0px 0px 0px;border-radius: 3px;border: 1px solid #ccc">
+			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
+				<strong>Email:</strong><br> <?php echo $_SESSION['user']['email']; ?>
+				<a style = "color: #1AA1D9;" href="/change_email">change email</a><br>
+			</div>
+			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
+				<strong>Username:</strong><br> <?php echo $_SESSION['user']['username'] ?>
+				<a style = "color: #1AA1D9;" href="/change_password">change password</a><br>
+			</div>
+			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
+				<strong>Tuffy Money:</strong><br> $<?php echo $_SESSION['user']['money'] ?>
+				<br>
+			</div>
+			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
+			<?php if ($_SESSION['user']['credit_card_num'] !== null): ?>
+				<strong>Credit Card:</strong><br> <?php echo "**** **** **** ".substr($_SESSION['user']['credit_card_num'], -4); ?><br>
+			
+			<?php else: ?>
+			<strong>Add a Credit Card</strong>
+			<form method="post">
+			  Credit Card Number:
+			      <input type="number" min="1000" max="9999" name="creditCard1" required/>
+			      -
+			      <input type="number" min="1000" max="9999" name="creditCard2" required/>
+			      -
+			      <input type="number" min="1000" max="9999" name="creditCard3" required/>
+			      -
+			      <input type="number" min="1000" max="9999"  name="creditCard4" required/>
+			      <br />
 
-	<button type="submit" name="change_email">change email</button>
-</form>
+			      Security Code: <input type="number" name="security_code" required><br>
+			      Card Expiry: <input class="inputCard" name="expiry" id="expiry" type="month" required/><br>
+			   
+			  <button type="submit" name="add_credit_card">Add card</button>
+			</form>
+			<?php endif; ?>
+			</div>
+		</div>
+		<div class = "col-xs-3"></div>
+	</div>
+	<h3>Add money to account (for testing)</h3>
+	<form method = "post">
+		<label>amount to add to balance: </label>
+		<input type="number" name="money_to_add">
 
-<h3>change password</h3>
-<form method = "post">
-	<label>Enter Current Password: </label>
-	<input type="password" name="curr_password">
+		<button type="submit" name = "add_money">add money</button>
+	</form>
 
-	<label>Enter New Password: </label>
-	<input type="password" name="new_password">
-
-	<button type="submit" name = "change_password">change password</button>
-</form>
-
-<h3>Add money to account</h3>
-<form method = "post">
-	<label>amount to add to balance: </label>
-	<input type="number" name="money_to_add">
-
-	<button type="submit" name = "add_money">add money</button>
-</form>
-
-<h2 style="color:red"><?php echo $msg; ?></h2>
-
-<?php if ($_SESSION['user']['credit_card_num'] === null): ?>
-<h3>Add Credit Card</h3>
-<form method="post">
-  Credit Card Number:
-      <input type="number" min="1000" max="9999" name="creditCard1" required/>
-      -
-      <input type="number" min="1000" max="9999" name="creditCard2" required/>
-      -
-      <input type="number" min="1000" max="9999" name="creditCard3" required/>
-      -
-      <input type="number" min="1000" max="9999"  name="creditCard4" required/>
-      <br />
-
-      Security Code: <input type="number" name="security_code">
-      Card Expiry:
-      <input class="inputCard" name="expiry" id="expiry" type="month" required/>
-   
-  <button type="submit" name="add_credit_card">Add card</button>
-</form>
-<?php else: ?>
-<?php $card_splitted = display_credit_card($_SESSION['user']['credit_card_num']); 
-echo "credit info: ";
-	foreach ($card_splitted as $fours)
-	{
-		echo $fours.' ';
-	}
-
-?>
-<?php endif; ?>
-
-<!--user info-->
-<h1>USER INFO</h1>
-<div>
-	EMAIL: <?php echo $_SESSION['user']['email']; ?><br>
-	USERNAME: <?php echo $_SESSION['user']['username'] ?><br>
-	MONEY: <?php echo $_SESSION['user']['money'] ?>
-
+	<h2 style="color:red"><?php echo $msg; ?></h2>
 </div>
-</div>
+
 
 <?php
   $js_files = array();

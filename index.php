@@ -1,6 +1,13 @@
 <?php
 include 'functions.php';
 
+//logging out directs us to index.php (this page) using GET method. Handling it here
+if($_GET['action'] == "logout" && $tuffy_user->is_loggedin())
+{
+	$tuffy_user->logout();
+	$msg="logged out";
+}
+
 //HEADER
 $title = 'TuffyBay';
 $css_files = array();

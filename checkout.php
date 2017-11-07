@@ -110,6 +110,12 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 
 		 	$last4display = substr($_SESSION['user']['credit_card_num'], -4);
 		 ?>
+
+		<?php if (empty($cart)): ?>
+		<div style="height:300px">
+			<h3>Cart is empty</h3>
+		</div>
+		<?php else: ?>
 		 <div class="col-md-3 cart-total">
 			 <div class="price-details">
 				 <h3>Price Details</h3>
@@ -122,9 +128,12 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 			 <h4 class="last-price">TOTAL</h4>
 			 <span class="total final" id="final-price">$<?php echo $total_price; ?></span>
 			 <div class="clearfix"></div>
-			<?php if (!$not_enough_stock): ?>
-			<form method = "post">
 
+			<!--Place order + Payment method-->
+			<?php if ($not_enough_stock): ?>
+			<h3>Not enough in stock</h3>
+			<?php else: ?>
+			<form method = "post">
 				<button class="order" type = "submit" name = "order_cart" style = "border:none">Place Order</button>
 				<br>
 				<h4>Choose payment method: </h4>
@@ -135,6 +144,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 		 		<input type="radio" disabled> Tuffy Money <span style = "color:#b72626">(not enough money)</span>
 		 		<div style = "padding-left:17px;"><a style = "color: #8ba1c4" href="/manage_user.php">Add more</a></div>
 		 		<?php else:?>
+		 		<input hidden name="total_price" value = "<?php echo $total_price; ?>">
 		 		<input type="radio" name="payment_method" value = "tuffy money" required> Tuffy Money
 		 		<?php endif; ?>
 
@@ -146,12 +156,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 		 		<?php else: ?>
 		 		<input type="radio" name="payment_method" value = "credit card: **** **** **** <?php echo $last4display; ?>" required> Use credit card: <?php echo "**** **** **** ".$last4display; ?>
 		 		<?php endif; ?>
-
 		 	</form>
-			<?php else: ?>
-			Not enough in stock
 			<?php endif; ?>
 	 	</div>
+	 	<?php endif; ?>
 </div>
 
 <?php

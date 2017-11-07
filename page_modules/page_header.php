@@ -1,15 +1,46 @@
+<?php 
+	$add_money_url = "http://".$_SERVER['SERVER_NAME']."/manage_user.php";
+	$logout_get_url = "http://" .$_SERVER['SERVER_NAME']. "?action=logout";
+
+	$cart_count_nav = $tuffy_inventory->get_cart_count($_SESSION['user']['id']);
+	$cart_count_nav = $cart_count_nav['COUNT(*)'];
+?>
+
 <!--header-->
 <div class="top_bg">
 <div class="container">
 	<div class="header_top-sec">
 		<div class="top_right">
 			<ul>
+
 				<li><a href="/index.php">TuffyBay</a></li>
 			</ul>
 		</div>
 		<div class="top_left">
 			<ul>
-				<li class="top_link"><a href="login.php">My Account</a></li>
+
+				<?php if (!$tuffy_user->is_loggedin()): ?>
+					<li class="top_link"><a href="login.php">My Account</a></li>
+					<!--case: not logged in-->
+					<li><a href="/login.php" target="_self" title="Login">Login/Register</a></li>
+				<?php else:?>
+					<!--case: logged in-->
+					<li><a href="/checkout.php"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>Cart (<?php echo "$cart_count_nav"?>)</a></li> | 
+				  	<li><a href="/orders.php">Orders</a></li> | 
+					<li><?php echo "Balance: <a href=".$add_money_url.">$".$_SESSION['user']['money']."</a> | ";?></li>
+					<li><a href="/user_page.php">
+					<?php
+						echo "My Account: ".$_SESSION['user']['username'];
+						if ($_SESSION['user']['type'] == 1)
+						{
+							echo "(admin)";
+						}
+					?>
+					</a>
+					</li> |
+					<li><a href="<?php echo $logout_get_url; ?>">Sign Out</a></li>
+
+				<?php endif; ?>
 			</ul>
 		</div>
 			<div class="clearfix"> </div>
@@ -48,7 +79,7 @@
 			<div class="clearfix"> </div>
 		 </div>
 		 <!---->
-		 <div class="cart box_1">
+		 <!--<div class="cart box_1">
 			 <a href="checkout.php">
 				<h3> <div class="total">
 				<span class="simpleCart_total"></span> (<span id="simpleCart_quantity" class="simpleCart_quantity"></span>)</div>
@@ -58,8 +89,8 @@
 			 <div class="clearfix"> </div>
 		 </div>
 		 <div class="clearfix"> </div>
-		 <!---->
-		 </div>
+
+		 </div>-->
 		<div class="clearfix"> </div>
 	</div>
 </div>

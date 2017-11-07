@@ -23,7 +23,7 @@ Modified by Unintentional Success for CSUF CPSC 362
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!-- start menu -->
-<script src="js/simpleCart.min.js"> </script>
+<!--<script src="js/simpleCart.min.js"> </script> want to use php-->
 <!-- start menu -->
 <link href="css/memenu.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript" src="js/memenu.js"></script>
