@@ -1,12 +1,9 @@
 <?php 
 	include 'functions.php';
-	$tuffy_inventory = new tuffy_inventory($DB_connection);
 
+	//PHP LOGIC
 	$item = $tuffy_inventory->inventory_get_item($_GET['itemid']);
-	$title = $item['name'];
-	$css_files = array(
-  'bootstrap.min.css',
-	);
+	$cart_url = "Location: http://" .$_SERVER['SERVER_NAME'] . "/checkout.php";
 
 	if (isset($_POST['add_to_cart']))
 	{
@@ -17,12 +14,15 @@
 		else
 		{
 			$tuffy_inventory->add_to_cart($_GET['itemid'], $_SESSION['user']['id'], $_POST['num_to_buy']);
-			header("Location: http://" .$_SERVER['SERVER_NAME'] . "/cart.php");
+			header($cart_url);
 	      	exit;
 		}
 	}
 
-	include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_header.phtml';
+	//HEADER
+	$title = $item['name'];
+	$css_files = array();
+	include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 ?>
 
 
@@ -51,7 +51,8 @@
 
 <h2 style="color:red"><?php echo $msg; ?></h2>
 
+<!--FOOTER-->
 <?php
 $js_files = array();
-include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_footer.phtml';
+include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_footer.php';
 ?>

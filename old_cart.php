@@ -4,6 +4,7 @@ $title = 'Shopping Cart'; # Enter title of page
 $css_files = array(
   "cart.css"
 );
+<<<<<<< HEAD:cart.php
 
 //if user is not logged in, kick them out
 if(!$tuffy_user->is_loggedin())
@@ -65,6 +66,9 @@ if(!$tuffy_user->is_loggedin())
     $cart = $tuffy_inventory->display_cart($_SESSION['user']['id']);
   }
   include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_header.phtml';
+=======
+include $_SERVER['DOCUMENT_ROOT'] . '/php/phtml/html_header.phtml';
+>>>>>>> 872fd0d493c19e178541e6f9f1faa055d984e085:old_cart.php
 ?>
 <h3>Shopping Cart</h3>
 
