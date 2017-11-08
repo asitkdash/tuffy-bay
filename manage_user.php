@@ -32,6 +32,12 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 	<div class = "row">
 		<div class = "col-xs-3"></div>
 		<div class = "col-xs-6" style = "background: #fff;padding: 10px 0px 0px 0px;border-radius: 3px;border: 1px solid #ccc">
+			<?php if ($_SESSION['user']['type'] == 1): ?>
+			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
+				<strong>Account Type:</strong><br> admin
+				<a style = "color: #1AA1D9;" href="/admin_page.php">admin panel</a><br>
+			</div>
+			<?php endif; ?>
 			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
 				<strong>Email:</strong><br> <?php echo $_SESSION['user']['email']; ?>
 				<a style = "color: #1AA1D9;" href="/change_email">change email</a><br>

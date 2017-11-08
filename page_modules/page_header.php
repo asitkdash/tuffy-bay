@@ -20,7 +20,6 @@
 			<ul>
 
 				<?php if (!$tuffy_user->is_loggedin()): ?>
-					<li class="top_link"><a href="login.php">My Account</a></li>
 					<!--case: not logged in-->
 					<li><a href="/login.php" target="_self" title="Login">Login/Register</a></li>
 				<?php else:?>
@@ -28,7 +27,7 @@
 					<li><a href="/checkout.php"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>Cart (<?php echo "$cart_count_nav"?>)</a></li> | 
 				  	<li><a href="/orders.php">Orders</a></li> | 
 					<li><?php echo "Balance: <a href=".$add_money_url.">$".$_SESSION['user']['money']."</a> | ";?></li>
-					<li><a href="/user_page.php">
+					<li><a href="/manage_user.php">
 					<?php
 						echo "My Account: ".$_SESSION['user']['username'];
 						if ($_SESSION['user']['type'] == 1)
@@ -51,33 +50,38 @@
  <div class="header-bottom">
 	 <div class="container">
 			<div class="logo">
-				<a href="/index.php"><h1>TuffyBay</h1></a>
-			</div>
-		 <!---->
 
-		 <div class="top-nav">
-			<ul class="memenu skyblue"><li class="active"><a href="/index.php">Home</a></li>
-				<li class="grid"><a href="#">Products</a>
-					<div class="mepanel">
-						<div class="col1 me-one">
-							<h4>Shop</h4>
-							<ul>
-								<li><a href="product.php">Category 1</a></li>
-								<li><a href="product.php">Category 2</a></li>
-								<li><a href="product.php">Category 3</a></li>
-							</ul>
-						</div>
-					</div>
-				</li>
-				<li class="grid">
-			    <form action="search_display.php" method="post">
-			        <input type="text" name="search_input">
-			        <button type="submit" name="search_item">SEARCH</button>
-			    </form>
-				</li>
-			</ul>
+			</div>
+		 <!--taking out some redundancies-->
+		 <div class = "row">
+		 	<div class = "col-xs-3"></div>
+		 	<div class = "col-xs-6">
+				<ul class="memenu skyblue">
+					<li class="grid"><a href="/browse_items.php">Browse</a>
+						<!--<div class="mepanel">
+							<div class="col1 me-one">
+								<h4>Shop</h4>
+								<ul>
+									<li><a href="product.php">Category 1</a></li>
+									<li><a href="product.php">Category 2</a></li>
+									<li><a href="product.php">Category 3</a></li>
+								</ul>
+							</div>
+						</div>-->
+					</li>
+					<li class="grid">
+				    <form action="search_display.php" method="post">
+				        <input type="text" name="search_input">
+				        <button type="submit" name="search_item">SEARCH</button>
+				    </form>
+					</li>
+				</ul>
 			<div class="clearfix"> </div>
+		 
+		 	</div>
+		 	<div class = "col-xs-3"></div>
 		 </div>
+		 
 		 <!---->
 		 <!--<div class="cart box_1">
 			 <a href="checkout.php">

@@ -77,6 +77,7 @@
 
 		//Registers user into database
 		public $register_usernameTaken = false;
+		public $register_emailTaken = false;
 
 		function register_user($username_post, $password_post, $email_post)
 		{
@@ -103,8 +104,19 @@
 	  			$this->register_usernameTaken = true;
 	  		}
 
-		  	//If username is not in database, register!
-	  		if(!$this->register_usernameTaken)
+	  		$selectQuery2 = "SELECT * FROM $users_table WHERE email = '$email_post'";
+	  		$selectResult2 = $conn->query($selectQuery2);
+
+	  		//Is username already taken in database?
+	  		if($selectResult2->num_rows == 0)
+  			{
+  				$this->register_emailTaken = false;
+  			}else{
+	  			$this->register_emailTaken = true;
+	  		}
+
+		  	//If username and email is not in database, register!
+	  		if(!$this->register_usernameTaken && !$this->register_emailTaken)
 	  		{
 				$insertQuery = "INSERT INTO $users_table (username, password, email) VALUES ('$username_post', '$passHashed', '$email_post')";
 				$insertResult = $conn->query($insertQuery);
@@ -312,6 +324,17 @@
 
 			$item = mysqli_fetch_assoc($selectResult);
 			return $item;
+		}
+
+		function inventory_update_item($item_id, $name, $count, $price, $description)
+		{
+			$updateQ = "UPDATE ".INVENTORY_TABLE." SET name = '$name', count = '$count', price = '$price', description = '$description' WHERE id = '$item_id'";
+
+			if ($this->conn->query($updateQ))
+			{
+				return true;
+			}
+			return false;
 		}
 
 		function inventory_display()

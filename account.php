@@ -1,6 +1,41 @@
 <?php
 include 'functions.php';
 
+if ($tuffy_user->is_loggedin()){
+    header("Location: http://" .$_SERVER['SERVER_NAME'].'/user_page.php');
+    /* Make sure that code below does not get executed when we redirect. */
+    exit;
+}
+
+$msg = "";
+$msg2 = "";
+$msg3 = "";
+if(isset($_POST['register_user']))
+{
+	if($_POST['register-password'] != $_POST['password_confirm'])
+	{
+		$msg = "passwords do not match";
+	}
+	else
+	{
+		$tuffy_user->register_user($_POST['register-username'], $_POST['register-password'], $_POST['register-email']);
+	    if ($tuffy_user->register_usernameTaken)
+	    {
+	    	$msg = "username already taken. ";
+		}
+		if ($tuffy_user->register_emailTaken)
+		{
+			$msg2 = "email already taken.";
+		}
+	}
+}
+else if (isset($_POST['login_user']))
+{
+  $tuffy_user->login_user($_POST['login-username'], $_POST['login-password']);
+  if (!$tuffy_user->login_usernameFound){$msg3="username does not exist";}
+  else if (!$tuffy_user->login_correctPassword){$msg3="wrong password";}
+}
+
 $title = 'Tuffy Bay';
 $css_files = array();
 include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
@@ -59,36 +94,34 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 
 			 })();
 			 </script>
+			 <div style = "color:red">
+			 	<?php echo $msg.$msg2; ?>
+			 </div>
 			 <div class="registration_form">
 			 <!-- Form -->
-				<form id="registration_form" action="contact.php" method="post">
+				<form id="registration_form" method="post">
 					<div>
 						<label>
-							<input placeholder="first name:" type="text" tabindex="1" required autofocus>
+							<input placeholder="username:" type="text" tabindex="1" name = "register-username" required autofocus>
 						</label>
 					</div>
 					<div>
 						<label>
-							<input placeholder="last name:" type="text" tabindex="2" required autofocus>
+							<input placeholder="email address:" type="email" tabindex="2" name = "register-email" required>
 						</label>
 					</div>
 					<div>
 						<label>
-							<input placeholder="email address:" type="email" tabindex="3" required>
+							<input placeholder="password" type="password" tabindex="3" name = "register-password" required>
 						</label>
 					</div>
 					<div>
 						<label>
-							<input placeholder="password" type="password" tabindex="4" required>
+							<input placeholder="retype password" type="password" tabindex="3" name ="password_confirm" required>
 						</label>
 					</div>
 					<div>
-						<label>
-							<input placeholder="retype password" type="password" tabindex="4" required>
-						</label>
-					</div>
-					<div>
-						<input type="submit" value="create an account" id="register-submit">
+						<input type="submit" value="create an account" id="register-submit" name = "register_user">
 					</div>
 				</form>
 				<!-- /Form -->
@@ -96,21 +129,24 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 		 </div>
 		 <div class="registration_left">
 			 <h2>existing user</h2>
+			 <div style = "color:red">
+			 	<?php echo $msg3; ?>
+			 </div>
 			 <div class="registration_form">
 			 <!-- Form -->
-				<form id="registration_form" action="contact.php" method="post">
+				<form id="registration_form" method="post">
 					<div>
 						<label>
-							<input placeholder="email:" type="email" tabindex="3" required>
+							<input placeholder="username:" type="text" tabindex="4" name = "login-username" required>
 						</label>
 					</div>
 					<div>
 						<label>
-							<input placeholder="password" type="password" tabindex="4" required>
+							<input placeholder="password" type="password" tabindex="5" name = "login-password" required>
 						</label>
 					</div>
 					<div>
-						<input type="submit" value="sign in" id="register-submit">
+						<input type="submit" value="sign in" id="register-submit" name = "login_user">
 					</div>
 				</form>
 			 <!-- /Form -->
