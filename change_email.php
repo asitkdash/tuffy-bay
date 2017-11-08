@@ -12,6 +12,8 @@ if (isset($_POST['change_email']))
 	else
 	{
 		$msg = "successfully updated email";
+		header("Location: http://" .$_SERVER['SERVER_NAME']."/manage_user.php");
+		exit;
 	}
 }
 

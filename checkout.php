@@ -16,6 +16,16 @@ $not_enough_money = true;
 
 if (isset($_POST['order_cart']))
 {
+	if (isset($_POST['use_this_card']))
+	{
+		$_POST['payment_method'] = "**** **** **** ".$_POST['creditCard4'];
+	}
+	if (isset($_POST['add_card_to_account']))
+	{
+		$security_code = $_POST['security_code'];
+	    $card_num = $_POST['creditCard1'] . $_POST['creditCard2'] . $_POST['creditCard3'] . $_POST['creditCard4'];
+		$tuffy_user->insert_card_info($_SESSION['user']['id'], $card_num, $security_code);
+	}
 	$tuffy_inventory->purchase_cart($_SESSION['user']['id'], $cart, $_POST['total_price'], $_POST['payment_method']);
 	header("Location: http://" .$_SERVER['SERVER_NAME'] . "/orders.php");
 	exit;
@@ -30,6 +40,7 @@ else if (isset($_POST['delete_shop_item']))
 	$tuffy_inventory->delete_cart_count($_SESSION['user']['id'], $_POST['item_id']);
 	$cart = $tuffy_inventory->display_cart($_SESSION['user']['id']);
 }
+
 
 //HEADER
 $title = 'Tuffy Bay';
@@ -151,8 +162,24 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 		 		<br>
 		 		<!--buying with credit card-->
 		 		<?php if (!isset($_SESSION['user']['credit_card_num'])): ?>
-		 		<input type="radio" disabled> Use credit card: <span style = "color:#b72626">(no card in account)</span>
-		 		<div style = "padding-left:17px;"><a href="/manage_user.php" style = "color: #8ba1c4">add a card</a></div>
+		 		<input type="radio" name="use_this_card" required></input> Use credit card: <br>
+				  Credit Card Number:<br>
+				      <input type="number" min="1000" max="9999" name="creditCard1" required/>
+				      -
+				      <input type="number" min="1000" max="9999" name="creditCard2" required/>
+				      -
+				      <input type="number" min="1000" max="9999" name="creditCard3" required/>
+				      -
+				      <input type="number" min="1000" max="9999"  name="creditCard4" required/>
+				      <br />
+				      <br>
+
+				      Security Code: <br>
+				      <input type="number" name="security_code" required><br><br>
+				      Card Expiry: <br><input class="inputCard" name="expiry" id="expiry" type="month" required/><br><br>
+				   
+				   		<input type="checkbox" name="add_card_to_account"> Save Credit Card
+				  	
 		 		<?php else: ?>
 		 		<input type="radio" name="payment_method" value = "credit card: **** **** **** <?php echo $last4display; ?>" required> Use credit card: <?php echo "**** **** **** ".$last4display; ?>
 		 		<?php endif; ?>

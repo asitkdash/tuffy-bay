@@ -34,7 +34,7 @@ include 'functions.php';
 <div class="single-sec">
 	 <div class="container">
 		 <ol class="breadcrumb">
-			 <li><a href="index.html">Home</a></li>
+			 <li><a href="index.php">Home</a></li>
 			 <li class="active">Products</li>
 		 </ol>
 		 <!-- start content -->
