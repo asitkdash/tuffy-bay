@@ -2,6 +2,14 @@
 //use javascript to make sure user puts atleast one checkbox
 include 'functions.php';
 
+//if not admin or higher kick them out
+if ($_SESSION['user']['type'] < 1 && !$tuffy_user->is_loggedin())
+{
+	header("Location: http://" .$_SERVER['SERVER_NAME']);
+	/* Make sure that code below does not get executed when we redirect. */
+	exit;
+}
+
 $index = 0;
 $edit_index = 0;
 $checked_items = array();

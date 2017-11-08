@@ -1,6 +1,14 @@
 <?php
 include 'functions.php';
 
+//if not admin or higher kick them out
+if ($_SESSION['user']['type'] < 1 && !$tuffy_user->is_loggedin())
+{
+	header("Location: http://" .$_SERVER['SERVER_NAME']);
+	/* Make sure that code below does not get executed when we redirect. */
+	exit;
+}
+
 //displaying a specified number of items to add can be done in javascript, doing in php for now
 $number_to_add = array();
 
@@ -17,6 +25,8 @@ else if(isset($_POST['add_items']))
 	foreach ($_POST['items_to_delete'] as $item_info) {
 		$tuffy_inventory->inventory_add_item($item_info['name'], $item_info['count'], $item_info['price'], $item_info['item_description']);
 	}
+	header("Location: http://".$_SERVER['SERVER_NAME']."/admin_page.php");
+	exit;
 }
 
 $title = 'Tuffy Bay';

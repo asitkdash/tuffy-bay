@@ -226,6 +226,15 @@
 			$_SESSION['user'] = [];
 		}
 
+		function get_username($user_id)
+		{
+			$selectQ = "SELECT username FROM ".USERS_TABLE." WHERE id = '$user_id'";
+			$selectResult = $this->conn->query($selectQ);
+			$info = mysqli_fetch_assoc($selectResult);
+
+			return $info['username'];
+		}
+
 		function update_email($user_id, $email)
 		{
 			//Check if email already exists
@@ -248,13 +257,10 @@
 			$selectQ = "SELECT password FROM ".USERS_TABLE." WHERE id = '$user_id'";
 			$selectResult = $this->conn->query($selectQ);
 			$user_info = mysqli_fetch_assoc($selectResult);
-			echo $selectQ;
 
-			echo $user_info['password'];
 			//check if current password matches (TODO: i think need to use password_needs_rehash(); )
 			if(password_verify($curr_password, $user_info['password']))
 			{
-				echo "hi";
 				$hashed_pass = password_hash($new_password, PASSWORD_DEFAULT);
 
 				$updateQ = "UPDATE ".USERS_TABLE." SET password = '$hashed_pass' WHERE id = '$user_id'";
@@ -474,9 +480,7 @@
 			//get user money
 			$selectQ = "SELECT money FROM ".USERS_TABLE." WHERE id = '$user_id'";
 			$selectResult = $this->conn->query($selectQ);
-			$user_info = mysqli_fetch_assoc($selectResult);	
-			echo $user_info['money'];
-			echo $total;		
+			$user_info = mysqli_fetch_assoc($selectResult);		
 
 			//if not enough money using tuffy money
 			if ($total > $user_info['money'] && $payment_method == "tuffy money")
@@ -510,7 +514,6 @@
 				//decrease user money
 				if($payment_method == "tuffy money")
 				{
-					echo "hi";
 					$new_user_money = $user_info['money'] - $total;
 					$updateMoney = "UPDATE ".USERS_TABLE." SET money = '$new_user_money' WHERE id = ".$user_id;
 					$this->conn->query($updateMoney);
@@ -563,18 +566,63 @@
 		}
 
 		//admin only
-		function display_returns()
+		function display_return_requests()
 		{
+			$selectQ = "SELECT * FROM ".ORDERS_TABLE." WHERE return_request = 1";
+			$selectResult = $this->conn->query($selectQ);
 
+			$return_req_arr = array();
+			while($table_row = $selectResult->fetch_assoc())
+			{
+				array_push($return_req_arr, $table_row);
+			}
+
+			return $return_req_arr;
 		}
 
 		//admin only
-		function approve_return()
+		//TODO: instead of deleting it from orders table, set it as complete instead
+		function approve_return_request($order)
 		{
-			//add to RETURNS table (archive purpose)
-			//move item back to inventory table
-			//give user money back
-			//remove from orders table
+			//putting array values in strings is weird
+			$order_id = $order['id'];
+			$item_name = $order['name'];
+			$item_amount = $order['amount'];
+			$item_price = $order['price'];
+			$payment_method = $order['payment_used'];
+			$user_id = $order['user_id'];
+			
+			$selectQ = "SELECT id FROM ".INVENTORY_TABLE." WHERE name = '$item_name'";
+			$selectResult = $this->conn->query($selectQ);
+
+			//update inventory
+			if ($selectResult->num_rows != 0)
+			{	
+				//move it back to inventory
+				$updateQ = "UPDATE ".INVENTORY_TABLE." SET count = count + '$item_amount' WHERE name = '$item_name'";
+				$this->conn->query($updateQ);
+			}
+			else
+			{
+				//item doesn't exist anymore, create a new one
+				$this->inventory_add_item($item_name, $item_amount, $item_price, $order['description']);
+			}
+
+			//give user money back if used tuffy money (if credit card do nothing)
+			if ($payment_method == "tuffy money") 
+			{
+				$updateQ2 = "UPDATE ".USERS_TABLE." SET money = money + ('$item_amount' * '$item_price') WHERE id = '$user_id'";
+				$this->conn->query($updateQ2);
+			}
+			
+			//consider it approved in database
+			$updateQ3 = "UPDATE ".ORDERS_TABLE." SET return_approved = 1, return_request = 0 WHERE id = '$order_id'";
+			$this->conn->query($updateQ3);
+
+
+
+			//we made it to the end!
+			return true;
 		}
 
 		function update_cart_count($user_id, $item_id, $new_amount)
@@ -600,11 +648,9 @@
 		function insert_wishlist($user_id, $item_id)
 		{
 			//check if it already exists
-			$selectQ = "SELECT item_id FROM ".WISHLIST_TABLE." WHERE user_id = '$user_id'";
-			$selectResult = $this->conn->query($selectQ);
-			$itemMatch = mysqli_fetch_assoc($selectResult);
+			$already_wished = $this->already_wishlisted($user_id, $item_id);
 
-			if ($itemMatch->num_rows == 0)
+			if (!$already_wished)
 			{
 				$insertQ = "INSERT INTO ".WISHLIST_TABLE." (user_id, item_id) VALUES ('$user_id', '$item_id')";
 				$this->conn->query($insertQ);
@@ -613,6 +659,19 @@
 
 			//return false if its already in wishlist
 			return false;
+		}
+
+		function already_wishlisted($user_id, $item_id)
+		{
+			$selectQ = "SELECT id FROM ".WISHLIST_TABLE." WHERE user_id = '$user_id' AND item_id = '$item_id'";
+			$selectResult = $this->conn->query($selectQ);
+
+			if ($selectResult->num_rows == 0)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		//return list of item_id's for a user
@@ -629,6 +688,8 @@
 
 			return $wishlist_arr;
 		}
+
+
 	}
 
 

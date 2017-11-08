@@ -16,6 +16,7 @@
 	$in_delivery_orders = array();
 	$finished_orders = array();
 	$return_requests = array();
+	$approved_requests = array();
 	$orders = $tuffy_inventory->display_orders($_SESSION['user']['id']);
 	foreach ($orders as $item_order)
 	{
@@ -23,13 +24,17 @@
 		{
 			array_push($return_requests, $item_order);
 		}
-		else if ($item_order['has_arrived'] == 0)
+		else if ($item_order['has_arrived'] == 0 && !$item_order['return_approved'])
 		{
 			array_push($in_delivery_orders, $item_order);
 		}
-		else
+		else if ($item_order['has_arrived'] == 1)
 		{
 			array_push($finished_orders, $item_order);
+		}
+		else if ($item_order['return_approved'] == 1)
+		{
+			array_push($approved_requests, $item_order);
 		}
 	}
 
@@ -78,7 +83,7 @@
 	</table>
 	
 
-	<h2>Orders: </h2>
+	<h2>Completed Orders: </h2>
 
 	<table class="table">
 		<tr>
@@ -129,6 +134,36 @@
 			<td><?php echo $item['description']?></td>
 			<td><?php echo $item['payment_used']?></td>
 			<td><?php echo get_time_ago(strtotime($item['date_ordered'])); ?></td>
+		</tr>
+		</div>
+	</div>
+	<?php endforeach;?>
+	</table>
+
+	<h2>Completed Returns: </h2>
+
+	<table class="table">
+		<tr>
+			<th>Name</th>
+			<th>amount</th>
+			<th>Price</th>
+			<th>Description</th>
+			<th>payment method</th>
+			<th>Date ordered</th>
+			<th>Amount refunded</th>
+		</tr>
+	<?php foreach($approved_requests as $item): ?>
+	<div class="row">
+		<div class = "col-xs-12">
+		<tr>
+			<td><a href="/item_page.php?itemid=<?php echo $item['inventory_id'];?>"><?php echo $item['name']?></a></td>
+			<td><?php echo $item['amount']?></td>
+			<td>$<?php echo $item['price']?></td>
+			<td><?php echo $item['description']?></td>
+			<td><?php echo $item['payment_used']?></td>
+			<td><?php echo get_time_ago(strtotime($item['date_ordered'])); ?></td>
+			<?php $total_refund = $item['amount'] * $item['price']; ?>
+			<td>$<?php echo number_format((float)$total_refund, 2, '.', ''); ?></td>
 		</tr>
 		</div>
 	</div>

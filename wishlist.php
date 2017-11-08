@@ -1,26 +1,26 @@
 <?php
 include 'functions.php';
-$tuffy_inventory = new tuffy_inventory($DB_connection);
 
 
-if (isset($_POST['search_item']))
+$wishlist_item_ids = $tuffy_inventory->display_wishlist($_SESSION['user']['id']);
+$wishlist_items = array();
+
+foreach($wishlist_item_ids as $item)
 {
-    $search_result = $tuffy_inventory->search_item($_POST['search_input']);
+	array_push($wishlist_items, $tuffy_inventory->inventory_get_item($item['item_id']));
 }
-//HEADER
+
+
 $title = 'Tuffy Bay';
 $css_files = array();
 include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 ?>
 
-<!--SEARCH BAR-->
-
-<div class="container">
-	<div style="margin-top: 50px;" class="row" align="center">
-		<?php if (!isset($_POST['search_item'])): ?>
-		<h3>no search input</h3>
-		<?php elseif ($search_result !== null): ?>
-			<?php foreach($search_result as $item): ?>
+<div class="featured">
+	 <div class="container">
+		 <h3>Wishlist: </h3>
+		 <div class="feature-grids">
+		 	<?php foreach($wishlist_items as $item): ?>
 		 	<?php
 		 		$item_link = "/item_page.php?itemid=".$item['id']; 
 
@@ -39,12 +39,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 				</a>
 			 </div>
 			 <?php endforeach; ?>
-		<?php else: ?>
-			<h3>found no matches</h3>
-		<?php endif; ?>
-	</div>
+			 <div class="clearfix"></div>
+		 </div>
+	 </div>
 </div>
-
 
 <?php
 $js_files = array();

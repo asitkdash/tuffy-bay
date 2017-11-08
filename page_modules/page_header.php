@@ -25,7 +25,8 @@
 				<?php else:?>
 					<!--case: logged in-->
 					<li><a href="/checkout.php"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>Cart (<?php echo "$cart_count_nav"?>)</a></li> | 
-				  	<li><a href="/orders.php">Orders</a></li> | 
+					<li><a href="/wishlist.php">Wishlist</a></li> |
+				  	<li><a href="/orders.php">Purchase History</a></li> | 
 					<li><?php echo "Balance: <a href=".$add_money_url.">$".$_SESSION['user']['money']."</a> | ";?></li>
 					<li><a href="/manage_user.php">
 					<?php

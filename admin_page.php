@@ -25,6 +25,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 				<br>
 				<br>
 				<a href="/admin_edit_items.php" class = "btn btn-info" style = "min-width: 200px">Edit items</a>
+				<br>
+				<br>
+				<a href="/admin_return_items.php" class = "btn btn-info" style = "min-width: 200px">Return Requests</a>
 			</div>
 			
 		</div>
