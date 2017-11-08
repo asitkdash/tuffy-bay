@@ -91,8 +91,10 @@ include 'functions.php';
                 </form>
               <?php endif; ?>
             <?php else: ?>
-              <input type="submit" class="button" value="Add to cart" name="add_to_cart" disabled>
-              <button type = "submit" name = "add_to_wishlist" disabled>Add to wishlist</button>
+            	<br>
+              <button type = "submit" class = "btn btn-info" disabled>Add to cart</button>
+              <button type = "submit" class = "btn btn-info" disabled>Add to wishlist</button>
+              <br>
               <small style = "color:red">must be logged in to add to cart/add to wishlist</small>
             <?php endif; ?>
 

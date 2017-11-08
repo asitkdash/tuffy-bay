@@ -10,6 +10,8 @@ TODO:
 5. certain things can be done through javascript rather than php, like the admin_add_items.php page
 6. there's currently no error display if an admin adds a new item and the name is already taken (SQL is setup to not allow it)
 7. right now after a return has been approved, it does not notify the user or give any info (give them a notification)
+8. automatic capitalization is happening in account.php
+9. Need to organize pages
 
 
 admin account: 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 06, 2017 at 09:11 PM
+-- Generation Time: Nov 08, 2017 at 04:06 AM
 -- Server version: 5.7.17
 -- PHP Version: 5.6.30
 
@@ -39,9 +39,15 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`id`, `name`, `count`, `price`, `description`) VALUES
-(10, 'Pencil', 50, '2.50', 'a pencil'),
-(12, 'Paper', 100, '1.25', 'A piece of paper <br> -made out of the best trees'),
-(13, 'Pen', 150, '0.25', 'A black pen <br> - very good condition');
+(30, 'Pencil', 50, '1.50', 'a pencil'),
+(31, 'Stapler', 100, '5.00', 'a stapler<br>with a sleek design'),
+(32, 'Pen', 150, '2.50', 'A pen'),
+(33, 'Ruler', 82, '2.50', 'A ruler'),
+(34, 'Binder', 500, '1.23', 'A binder'),
+(35, 'College-ruled Paper', 100, '5.00', 'a paper for college'),
+(36, 'Crayons', 200, '2.00', 'has 24 colors'),
+(37, 'markers', 100, '5.00', 'can color stuff'),
+(38, 'usb stick', 1000, '2.12', 'can store stuff. 10 TB.');
 
 -- --------------------------------------------------------
 
@@ -61,18 +67,8 @@ CREATE TABLE `ordered_items` (
   `has_arrived` bit(1) NOT NULL DEFAULT b'0',
   `date_ordered` datetime NOT NULL,
   `payment_used` varchar(128) NOT NULL,
-  `return_request` bit(1) NOT NULL DEFAULT b'0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `return_requests`
---
-
-CREATE TABLE `return_requests` (
-  `id` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL
+  `return_request` bit(1) NOT NULL DEFAULT b'0',
+  `return_approved` bit(1) NOT NULL DEFAULT b'0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -110,7 +106,19 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `type`, `email`, `money`, `credit_card_num`, `credit_card_security`) VALUES
-(12, 'admin_user', '$2y$10$d0eS/Y6Vou4fGFmD10NlFejMtIRAJYGEWyKZqw/RWaF3rFhpqgzJ6', 0, 'admin_user@tuffybay.com', '0.00', NULL, NULL);
+(17, 'admin_user', '$2y$10$ER344izJRe7/OtxMxXXZrezu6cbHEwAESpaF.JjeK3Dd4.rc/HOYu', 1, 'admin_user@tuffybay.com', '0.00', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlists`
+--
+
+CREATE TABLE `wishlists` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `item_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
@@ -130,16 +138,12 @@ ALTER TABLE `ordered_items`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `return_requests`
---
-ALTER TABLE `return_requests`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `shopping_cart_items`
 --
 ALTER TABLE `shopping_cart_items`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cart_must_have_user` (`user_id`),
+  ADD KEY `cart_must_have_item` (`item_id`);
 
 --
 -- Indexes for table `users`
@@ -149,6 +153,14 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `username` (`username`);
 
 --
+-- Indexes for table `wishlists`
+--
+ALTER TABLE `wishlists`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `dependent_on_inventory` (`item_id`),
+  ADD KEY `dependent_on_user` (`user_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -156,27 +168,45 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT for table `ordered_items`
 --
 ALTER TABLE `ordered_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
---
--- AUTO_INCREMENT for table `return_requests`
---
-ALTER TABLE `return_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 --
 -- AUTO_INCREMENT for table `shopping_cart_items`
 --
 ALTER TABLE `shopping_cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+--
+-- AUTO_INCREMENT for table `wishlists`
+--
+ALTER TABLE `wishlists`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `shopping_cart_items`
+--
+ALTER TABLE `shopping_cart_items`
+  ADD CONSTRAINT `cart_must_have_item` FOREIGN KEY (`item_id`) REFERENCES `inventory` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cart_must_have_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `wishlists`
+--
+ALTER TABLE `wishlists`
+  ADD CONSTRAINT `dependent_on_inventory` FOREIGN KEY (`item_id`) REFERENCES `inventory` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `dependent_on_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
