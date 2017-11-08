@@ -2,8 +2,6 @@
 	$add_money_url = "http://".$_SERVER['SERVER_NAME']."/manage_user.php";
 	$logout_get_url = "http://" .$_SERVER['SERVER_NAME']. "?action=logout";
 
-	$cart_count_nav = $tuffy_inventory->get_cart_count($_SESSION['user']['id']);
-	$cart_count_nav = $cart_count_nav['COUNT(*)'];
 ?>
 
 <!--header-->
@@ -23,6 +21,11 @@
 					<!--case: not logged in-->
 					<li><a href="/login.php" target="_self" title="Login">Login/Register</a></li>
 				<?php else:?>
+					<?php 
+						//this was causing some errors on other machines (when session id was null)
+						$cart_count_nav = $tuffy_inventory->get_cart_count($_SESSION['user']['id']);
+						$cart_count_nav = $cart_count_nav['COUNT(*)'];
+					?>
 					<!--case: logged in-->
 					<li><a href="/checkout.php"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>Cart (<?php echo "$cart_count_nav"?>)</a></li> | 
 					<li><a href="/wishlist.php">Wishlist</a></li> |
