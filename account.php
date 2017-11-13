@@ -2,7 +2,7 @@
 include 'functions.php';
 
 if ($tuffy_user->is_loggedin()){
-    header("Location: http://" .$_SERVER['SERVER_NAME'].'/user_page.php');
+    header("Location: http://" .$_SERVER['SERVER_NAME'].'/manage_user.php');
     /* Make sure that code below does not get executed when we redirect. */
     exit;
 }

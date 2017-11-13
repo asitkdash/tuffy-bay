@@ -11,7 +11,12 @@ TODO:
 6. there's currently no error display if an admin adds a new item and the name is already taken (SQL is setup to not allow it)
 7. right now after a return has been approved, it does not notify the user or give any info (give them a notification)
 8. automatic capitalization is happening in account.php
-9. Need to organize pages
+10. radio buttons on cart is all messed
+11. increase size for description on items 
+12. closing db connection after use?
+
+SUPER TODO: 
+1. clean up pages
 
 
 admin account: 
