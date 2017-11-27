@@ -544,7 +544,15 @@
 
 		function display_orders($user_id)
 		{
-			$selectQ = "SELECT * FROM ".ORDERS_TABLE." WHERE user_id = '$user_id'";
+			if ($user_id != "all")
+			{
+				$selectQ = "SELECT * FROM ".ORDERS_TABLE." WHERE user_id = '$user_id'";
+			}
+			else if ($user_id == "all")
+			{
+				$selectQ = "SELECT * FROM ".ORDERS_TABLE;
+			}
+
 			$selectResult = $this->conn->query($selectQ);
 
 			$order_arr = array();
@@ -567,6 +575,47 @@
 			}
 
 			return $order_info;
+		}
+
+		function cancel_order($order)
+		{
+			//putting array values in strings is weird
+			$order_id = $order['id'];
+			$item_name = $order['name'];
+			$item_amount = $order['amount'];
+			$item_price = $order['price'];
+			$payment_method = $order['payment_used'];
+			$user_id = $order['user_id'];
+			
+			$selectQ = "SELECT id FROM ".INVENTORY_TABLE." WHERE name = '$item_name'";
+			$selectResult = $this->conn->query($selectQ);
+
+			//update inventory
+			if ($selectResult->num_rows != 0)
+			{	
+				//move it back to inventory
+				$updateQ = "UPDATE ".INVENTORY_TABLE." SET count = count + '$item_amount' WHERE name = '$item_name'";
+				$this->conn->query($updateQ);
+			}
+			else
+			{
+				//item doesn't exist anymore, create a new one
+				$this->inventory_add_item($item_name, $item_amount, $item_price, $order['description']);
+			}
+
+			//give user money back if used tuffy money (if credit card do nothing)
+			if ($payment_method == "tuffy money") 
+			{
+				$updateQ2 = "UPDATE ".USERS_TABLE." SET money = money + ('$item_amount' * '$item_price') WHERE id = '$user_id'";
+				$this->conn->query($updateQ2);
+			}
+
+			//delete from orders table
+			$deleteQ = "DELETE FROM ".ORDERS_TABLE." WHERE id = '$order_id'";
+			$deleteResult = $this->conn->query($deleteQ);
+
+			if ($deleteResult){return true;}
+			return false;
 		}
 
 		function return_request($order_id, $return_reason)
@@ -629,13 +678,26 @@
 			}
 			
 			//consider it approved in database
-			$updateQ3 = "UPDATE ".ORDERS_TABLE." SET return_approved = 1, return_request = 0 WHERE id = '$order_id'";
+			$updateQ3 = "UPDATE ".ORDERS_TABLE." SET return_approved = 1, return_request = 0, has_arrived = 0 WHERE id = '$order_id'";
 			$this->conn->query($updateQ3);
 
 
 
 			//we made it to the end!
 			return true;
+		}
+
+		//For delivery man to use (after they have delivered the order to the house), gonna use this for testing
+		function complete_delivery($order_id)
+		{
+			$curr_time = new DateTime("now");
+			$curr_time = $curr_time->format("Y-m-d H:i:s"); //this is how datetime is stored in sql
+
+			$updateQ = "UPDATE ".ORDERS_TABLE." SET has_arrived = 1, date_arrived = '$curr_time' WHERE id = '$order_id'";
+			$updateResult = $this->conn->query($updateQ);
+
+			if ($updateResult) {return true;}
+			return false;
 		}
 
 		function update_cart_count($user_id, $item_id, $new_amount)

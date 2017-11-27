@@ -28,6 +28,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 				<br>
 				<br>
 				<a href="/admin_return_items.php" class = "btn btn-info" style = "min-width: 200px">Return Requests</a>
+				<br>
+				<br>
+				<a href="/admin_confirm_delivery.php" class = "btn btn-info" style = "min-width: 200px">Confirm Delivery</a>
 			</div>
 			
 		</div>

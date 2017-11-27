@@ -3,6 +3,11 @@ include 'functions.php';
 
   //PHP LOGIC
   $item = $tuffy_inventory->inventory_get_item($_GET['itemid']);
+  if (empty($item))
+  {
+    header("HTTP/1.0 404 Not Found");
+    exit;
+  }
   $cart_url = "Location: http://" .$_SERVER['SERVER_NAME'] . "/checkout.php";
 
   if (isset($_POST['add_to_cart']))

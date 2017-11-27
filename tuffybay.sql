@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 08, 2017 at 04:06 AM
+-- Generation Time: Nov 27, 2017 at 09:06 PM
 -- Server version: 5.7.17
 -- PHP Version: 5.6.30
 
@@ -39,15 +39,14 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`id`, `name`, `count`, `price`, `description`) VALUES
-(30, 'Pencil', 50, '1.50', 'a pencil'),
-(31, 'Stapler', 100, '5.00', 'a stapler<br>with a sleek design'),
-(32, 'Pen', 150, '2.50', 'A pen'),
+(31, 'Stapler', 90, '5.00', 'a stapler<br>with a sleek design'),
+(32, 'Pen', 44, '2.50', 'A pen'),
 (33, 'Ruler', 82, '2.50', 'A ruler'),
-(34, 'Binder', 500, '1.23', 'A binder'),
-(35, 'College-ruled Paper', 100, '5.00', 'a paper for college'),
-(36, 'Crayons', 200, '2.00', 'has 24 colors'),
-(37, 'markers', 100, '5.00', 'can color stuff'),
-(38, 'usb stick', 1000, '2.12', 'can store stuff. 10 TB.');
+(34, 'Binder', 499, '1.23', 'A binder'),
+(35, 'College-ruled Paper', 91, '5.00', 'a paper for college'),
+(36, 'Crayons', 98, '2.00', 'has 24 colors'),
+(39, '123', 123, '123.00', 'asd'),
+(40, 'Pencil', 44, '1.50', 'a pencil');
 
 -- --------------------------------------------------------
 
@@ -68,7 +67,8 @@ CREATE TABLE `ordered_items` (
   `date_ordered` datetime NOT NULL,
   `payment_used` varchar(128) NOT NULL,
   `return_request` bit(1) NOT NULL DEFAULT b'0',
-  `return_approved` bit(1) NOT NULL DEFAULT b'0'
+  `return_approved` bit(1) NOT NULL DEFAULT b'0',
+  `return_reason` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -106,7 +106,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `type`, `email`, `money`, `credit_card_num`, `credit_card_security`) VALUES
-(17, 'admin_user', '$2y$10$ER344izJRe7/OtxMxXXZrezu6cbHEwAESpaF.JjeK3Dd4.rc/HOYu', 1, 'admin_user@tuffybay.com', '0.00', NULL, NULL);
+(17, 'admin_user', '$2y$10$ER344izJRe7/OtxMxXXZrezu6cbHEwAESpaF.JjeK3Dd4.rc/HOYu', 1, 'admin_user@tuffybay.com', '26.77', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -168,27 +168,27 @@ ALTER TABLE `wishlists`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 --
 -- AUTO_INCREMENT for table `ordered_items`
 --
 ALTER TABLE `ordered_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 --
 -- AUTO_INCREMENT for table `shopping_cart_items`
 --
 ALTER TABLE `shopping_cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- Constraints for dumped tables
 --

@@ -4,10 +4,9 @@ include 'functions.php';
 
 if (isset($_POST['submit_return']))
 {
-	echo $_POST['return_reason'];
 	$tuffy_inventory->return_request($_POST['order_id_thispage'], $_POST['return_reason']);
-	//header("Location: http://" .$_SERVER['SERVER_NAME'] . "/orders.php");
-	//exit;
+	header("Location: http://" .$_SERVER['SERVER_NAME'] . "/orders_return_requests.php");
+	exit;
 }
 else if (isset($_POST['asked_return']))
 {
