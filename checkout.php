@@ -160,29 +160,30 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 		 		<div style = "padding-left:17px;"><a style = "color: #8ba1c4" href="/manage_user.php">Add more</a></div>
 		 		<?php else:?>
 		 		<input hidden name="total_price" value = "<?php echo $total_price; ?>">
-		 		<input type="radio" name="payment_method" value = "tuffy money" required> Tuffy Money
+		 		<input id="tuffy_money_id" type="radio" name="payment_method" value = "tuffy money" required> Tuffy Money
 		 		<?php endif; ?>
 
 		 		<br>
 		 		<!--buying with credit card-->
 		 		<?php if (!isset($_SESSION['user']['credit_card_num'])): ?>
-		 		<input type="radio" name="payment_method" value = "use_this_card"></input> Use credit card: <br>
-				  Credit Card Number:<br>
-				      <input type="number" min="1000" max="9999" name="creditCard1" />
-				      -
-				      <input type="number" min="1000" max="9999" name="creditCard2" />
-				      -
-				      <input type="number" min="1000" max="9999" name="creditCard3" />
-				      -
-				      <input type="number" min="1000" max="9999"  name="creditCard4" />
-				      <br />
-				      <br>
+		 		<input id="credit_card_id" type="radio" name="payment_method" value = "use_this_card" required></input> Use credit card: <br>
+				Credit Card Number:<br>
+					<input disabled class = "card_req" type="number" min="1000" max="9999" name="creditCard1" />
+					-
+					<input disabled class = "card_req" type="number" min="1000" max="9999" name="creditCard2" />
+					-
+					<input disabled class = "card_req" type="number" min="1000" max="9999" name="creditCard3" />
+					-
+					<input disabled class = "card_req" type="number" min="1000" max="9999"  name="creditCard4" />
+					<br />
+					<br>
 
-				      Security Code: <br>
-				      <input type="number" name="security_code" ><br><br>
-				      Card Expiry: <br><input class="inputCard" name="expiry" id="expiry" type="month" /><br><br>
+				    Security Code: <br>
+				    <input disabled class = "card_req" type="number" name="security_code"><br><br>
+				    Card Expiry: <br>
+				    <input disabled class="card_req" name="expiry" id="expiry" type="month"><br><br>
 				   
-				   		<input type="checkbox" name="add_card_to_account"> Save Credit Card
+				   	<input disabled class = "card_optional" type="checkbox" name="add_card_to_account"> Save Credit Card
 				  	
 		 		<?php else: ?>
 		 		<input type="radio" name="payment_method" value = "credit card: **** **** **** <?php echo $last4display; ?>" required> Use credit card: <?php echo "**** **** **** ".$last4display; ?>
@@ -192,6 +193,21 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 	 	</div>
 	 	<?php endif; ?>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript">
+        $("#credit_card_id").click(function() {
+            $(".card_req").prop("required", true);
+            $(".card_req").prop("disabled", false);
+            $(".card_optional").prop("disabled", false);
+        });
+        $("#tuffy_money_id").click(function() {
+            $(".card_req").prop("required", false);
+            $(".card_req").prop("disabled", true);
+            $(".card_optional").prop("disabled", true);
+            $(".card_optional").prop("checked", false);
+        });
+</script>
 
 <?php
 $js_files = array();

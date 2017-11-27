@@ -47,6 +47,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 				<th>Amount</th>
 				<th>Description</th>
 				<th>payment method</th>
+				<th>reason</th>
 				<th>Date ordered</th>
 			</tr>
 			<?php foreach($return_list as $item): ?>
@@ -58,6 +59,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 				<td><?php echo $item['amount']?></td>
 				<td><?php echo $item['description']?></td>
 				<td><?php echo $item['payment_used']?></td>
+				<td><?php echo $item['return_reason']?></td>
 				<td><?php echo get_time_ago(strtotime($item['date_ordered'])); ?></td>
 
 

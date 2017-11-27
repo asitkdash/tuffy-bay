@@ -556,9 +556,22 @@
 			return $order_arr;
 		}
 
-		function return_request($order_id)
+		function get_order($order_id)
 		{
-			$updateQ = "UPDATE ".ORDERS_TABLE." SET return_request = 1 WHERE id = '$order_id'";
+			$selectQ = "SELECT * FROM ".ORDERS_TABLE." WHERE id = '$order_id'";
+			$selectResult = $this->conn->query($selectQ);
+
+			if ($selectResult->num_rows == 1)
+			{
+				$order_info = mysqli_fetch_assoc($selectResult);
+			}
+
+			return $order_info;
+		}
+
+		function return_request($order_id, $return_reason)
+		{
+			$updateQ = "UPDATE ".ORDERS_TABLE." SET return_request = 1, return_reason = '$return_reason' WHERE id = '$order_id'";
 			$updateResult = $this->conn->query($updateQ);
 
 			if ($updateResult){return true;}

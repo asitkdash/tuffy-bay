@@ -38,11 +38,6 @@
 		}
 	}
 
-	if (isset($_POST['asked_return']))
-	{
-		$tuffy_inventory->return_request($_POST['order_id']);
-		header("Refresh:0");
-	}
 	include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 ?>
 
@@ -71,7 +66,7 @@
 			<td><?php echo $item['payment_used']?></td>
 			<td><?php echo get_time_ago(strtotime($item['date_ordered'])); ?></td>
 			<td>
-			<form method="post">
+			<form method="post" action="return_request.php">
 				<input hidden name="order_id" = value = "<?php echo $item['id']; ?>">
 				<button type = "submit" name = "asked_return">return</button>
 			</form>
@@ -149,6 +144,7 @@
 			<th>Price</th>
 			<th>Description</th>
 			<th>payment method</th>
+			<th>return reason</th>
 			<th>Date ordered</th>
 			<th>Amount refunded</th>
 		</tr>
@@ -161,6 +157,7 @@
 			<td>$<?php echo $item['price']?></td>
 			<td><?php echo $item['description']?></td>
 			<td><?php echo $item['payment_used']?></td>
+			<td><?php echo $item['return_reason']?></td>
 			<td><?php echo get_time_ago(strtotime($item['date_ordered'])); ?></td>
 			<?php $total_refund = $item['amount'] * $item['price']; ?>
 			<td>$<?php echo number_format((float)$total_refund, 2, '.', ''); ?></td>
