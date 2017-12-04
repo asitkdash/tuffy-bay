@@ -18,7 +18,7 @@ if(isset($_POST['register_user']))
 	}
 	else
 	{
-		$tuffy_user->register_user($_POST['register-username'], $_POST['register-password'], $_POST['register-email']);
+		$tuffy_user->register_user($_POST['register-username'], $_POST['register-password'], $_POST['register-email'], $_POST['sec_question'], $_POST['sec_answer']);
 	    if ($tuffy_user->register_usernameTaken)
 	    {
 	    	$msg = "username already taken. ";
@@ -117,9 +117,25 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 					</div>
 					<div>
 						<label>
-							<input placeholder="retype password" type="password" tabindex="3" name ="password_confirm" required>
+							<input placeholder="retype password" type="password" tabindex="4" name ="password_confirm" required>
 						</label>
 					</div>
+					<div class="form-group">
+					  	<label for="sel1"><strong>Security Question:</strong></label>
+					  	<select class="form-control" id="sel1" name = "sec_question" required tabindex="5">
+					    	<option>What school did you attend for sixth grade?</option>
+					    	<option>What was your favorite sport in high school?</option>
+					    	<option>What is your favorite movie?</option>
+					    	<option>What is the name of your favorite childhood friend?</option>
+					    	<option>What was your childhood nickname?</option>
+					    	<option>In what city or town did your mother and father meet?</option>
+					    	<option>What is your favorite team?</option>
+					  	</select>
+					  	<label>
+							<input placeholder="answer" type="text" tabindex="6" name ="sec_answer" required>
+						</label>
+					</div>
+					
 					<div>
 						<input type="submit" value="create an account" id="register-submit" name = "register_user">
 					</div>
@@ -137,12 +153,12 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 				<form id="registration_form" method="post">
 					<div>
 						<label>
-							<input placeholder="username:" type="text" tabindex="4" name = "login-username" required>
+							<input placeholder="username:" type="text" tabindex="6" name = "login-username" required>
 						</label>
 					</div>
 					<div>
 						<label>
-							<input placeholder="password" type="password" tabindex="5" name = "login-password" required>
+							<input placeholder="password" type="password" tabindex="7" name = "login-password" required>
 						</label>
 					</div>
 					<div>

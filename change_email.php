@@ -2,6 +2,13 @@
 include 'functions.php';
 $msg = "Changing Email Address";
 
+//if user is not logged in, kick them out
+if(!$tuffy_user->is_loggedin())
+{
+  header("Location: http://" .$_SERVER['SERVER_NAME']);
+  exit;
+}
+
 if (isset($_POST['change_email']))
 {
 	$email_updated = $tuffy_user->update_email($_SESSION['user']['id'], $_POST['new_email']);

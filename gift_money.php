@@ -1,6 +1,13 @@
 <?php
 include 'functions.php';
 
+//if user is not logged in, kick them out
+if(!$tuffy_user->is_loggedin())
+{
+  header("Location: http://" .$_SERVER['SERVER_NAME']);
+  exit;
+}
+
 if (isset($_POST['user_search']))
 {
 	echo $_POST['user_to_gift'];

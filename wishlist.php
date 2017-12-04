@@ -1,6 +1,12 @@
 <?php
 include 'functions.php';
 
+//if user is not logged in, kick them out
+if(!$tuffy_user->is_loggedin())
+{
+  header("Location: http://" .$_SERVER['SERVER_NAME']);
+  exit;
+}
 
 $wishlist_item_ids = $tuffy_inventory->display_wishlist($_SESSION['user']['id']);
 $wishlist_items = array();

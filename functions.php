@@ -79,7 +79,7 @@
 		public $register_usernameTaken = false;
 		public $register_emailTaken = false;
 
-		function register_user($username_post, $password_post, $email_post)
+		function register_user($username_post, $password_post, $email_post, $sec_question, $sec_answer)
 		{
 			$conn = $this->conn;
 			$users_table = USERS_TABLE;
@@ -88,6 +88,8 @@
 			$username_post = $conn->real_escape_string($username_post);
 			$password_post = $conn->real_escape_string($password_post);
 			$email_post = $conn->real_escape_string($email_post);
+			$sec_question = $conn->real_escape_string($sec_question);
+			$sec_answer = $conn->real_escape_string($sec_answer);
 
 			//password hash and salt
 	  		$passHashed = password_hash($password_post, PASSWORD_DEFAULT);
@@ -118,7 +120,7 @@
 		  	//If username and email is not in database, register!
 	  		if(!$this->register_usernameTaken && !$this->register_emailTaken)
 	  		{
-				$insertQuery = "INSERT INTO $users_table (username, password, email) VALUES ('$username_post', '$passHashed', '$email_post')";
+				$insertQuery = "INSERT INTO $users_table (username, password, email, security_question, security_answer) VALUES ('$username_post', '$passHashed', '$email_post', '$sec_question', '$sec_answer')";
 				$insertResult = $conn->query($insertQuery);
 
 				if($insertResult)
@@ -329,6 +331,42 @@
 			{
 				return true;
 			}
+			return false;
+		}
+
+		function get_security_question($user_id)
+		{
+			$selectQ = "SELECT security_question FROM ".USERS_TABLE." WHERE id = '$user_id'";
+			$selectResult = $this->conn->query($selectQ);
+
+			if ($selectResult->num_rows == 1)
+			{
+				$sec_question = mysqli_fetch_assoc($selectResult);
+			}
+
+			return $sec_question['security_question'];
+		}
+
+		function authenticate_security_question($user_id, $user_answer)
+		{
+			$selectQ = "SELECT security_answer FROM ".USERS_TABLE." WHERE id = '$user_id'";
+			$selectResult = $this->conn->query($selectQ);
+
+			if ($selectResult->num_rows == 1)
+			{
+				$sec_answer = mysqli_fetch_assoc($selectResult);
+				$sec_answer = $sec_answer['security_answer'];
+			}
+			else
+			{
+				return false;
+			}
+
+			if ($user_answer == $sec_answer)
+			{
+				return true;
+			}
+
 			return false;
 		}
 	}

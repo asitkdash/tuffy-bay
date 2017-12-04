@@ -2,9 +2,31 @@
 include 'functions.php';
 $msg = "Changing Password";
 
+//if user is not logged in, kick them out
+if(!$tuffy_user->is_loggedin())
+{
+  header("Location: http://" .$_SERVER['SERVER_NAME']);
+  exit;
+}
+
+$question_answered = false;
+$security_question = $tuffy_user->get_security_question($_SESSION['user']['id']);
+
+if (isset($_POST['answered_question']))
+{
+	$question_answered = true;
+	$answer_correct = $tuffy_user->authenticate_security_question($_SESSION['user']['id'], $_POST['answer_to_question']);
+	if (!$answer_correct)
+	{
+		$msg = "answer to question incorrect, try again.";
+	}
+}
 if (isset($_POST['change_password']))
 {
-	var_dump ($_POST);
+	//set these to true so user doesn't have to redo security answer
+	$question_answered = true;
+	$answer_correct = true;
+	
 	if ($_POST['new_password'] == $_POST['new_password_confirm'])
 	{
 		$password_updated = $tuffy_user->update_password($_SESSION['user']['id'], $_POST['curr_password'], $_POST['new_password']);
@@ -39,7 +61,18 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 		<div class = "col-xs-4">
 		<?php if ($password_updated): ?>
 
-		<?php else: ?>
+		<?php elseif (!$question_answered || !$answer_correct): ?>
+		<form method = "post">
+			<div class="form-group">
+			    <label for="InputAnswer"><?php echo $security_question; ?></label>
+			    <input type="text" class="form-control" id="InputAnswer" placeholder="answer" name = "answer_to_question" required>
+			</div>
+			<div align="center">
+				<button type = "submit" class = "btn btn-primary" name = "answered_question" style = "min-width: 55%">Submit</button>
+			</div>
+		</form>
+		
+		<?php elseif ($question_answered && $answer_correct): ?>
 		<form method = "post">
 			<div class="form-group">
 			    <label for="InputCurrPassword">Current Password</label>
@@ -55,7 +88,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 			</div>
 			<br>
 		  	<div align = "center">
-		  		<button type="submit" class="btn btn-primary" name = "change_password" style = "width: 55%">change password</button>
+		  		<button type="submit" class="btn btn-primary" name = "change_password" style = "min-width: 55%">change password</button>
 		  	</div>
 		</form>
 		<?php endif; ?>
