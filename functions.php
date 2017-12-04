@@ -235,6 +235,21 @@
 			return $info['username'];
 		}
 
+		function check_user_existance($username)
+		{
+			$selectQ = "SELECT username FROM ".USERS_TABLE." WHERE username = '$username'";
+			$selectResult = $this->conn->query($selectQ);
+
+			if($selectResult->num_rows == 1)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		function update_email($user_id, $email)
 		{
 			//Check if email already exists
@@ -297,6 +312,23 @@
 				return true;
 			}
 
+			return false;
+		}
+
+		function gift_money($amount, $sender_id, $receiver)
+		{
+			//add money to reciever
+			$updateQ = "UPDATE ".USERS_TABLE." SET money = money - '$amount' WHERE id = '$sender_id'";
+			$update1 = $this->conn->query($updateQ);
+
+			//subtract money from sender
+			$updateQ2 = "UPDATE ".USERS_TABLE." SET money = money + '$amount' WHERE username = '$receiver'";
+			$update2 = $this->conn->query($updateQ2);
+
+			if ($update1 && $update2)
+			{
+				return true;
+			}
 			return false;
 		}
 	}

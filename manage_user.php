@@ -35,19 +35,23 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 			<?php if ($_SESSION['user']['type'] == 1): ?>
 			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
 				<strong>Account Type:</strong><br> admin
-				<a style = "color: #1AA1D9;" href="/admin_page.php">admin panel</a><br>
+				<a style = "color: #1AA1D9;" href="/admin_page.php">admin panel</a>
+				<br>
 			</div>
 			<?php endif; ?>
 			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
 				<strong>Email:</strong><br> <?php echo $_SESSION['user']['email']; ?>
-				<a style = "color: #1AA1D9;" href="/change_email.php">change email</a><br>
+				<a style = "color: #1AA1D9;" href="/change_email.php">change email</a>
+				<br>
 			</div>
 			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
 				<strong>Username:</strong><br> <?php echo $_SESSION['user']['username'] ?>
-				<a style = "color: #1AA1D9;" href="/change_password.php">change password</a><br>
+				<a style = "color: #1AA1D9;" href="/change_password.php">change password</a>
+				<br>
 			</div>
 			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
 				<strong>Tuffy Money:</strong><br> $<?php echo $_SESSION['user']['money'] ?>
+				<a style = "color: #1AA1D9;" href="/gift_money.php">gift money</a>
 				<br>
 			</div>
 			<div style = "border-bottom: 1px solid #eee; padding: 20px 40px">
