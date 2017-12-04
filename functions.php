@@ -545,7 +545,7 @@
 		public $not_enough_money = false;
 
 		//$items is an array of items with their info, return false if not enough stock
-		function purchase_cart($user_id, $items, $total, $payment_method)
+		function purchase_cart($user_id, $items, $total, $payment_method, $reward_money)
 		{
 			//get user money
 			$selectQ = "SELECT money FROM ".USERS_TABLE." WHERE id = '$user_id'";
@@ -588,6 +588,10 @@
 					$updateMoney = "UPDATE ".USERS_TABLE." SET money = '$new_user_money' WHERE id = ".$user_id;
 					$this->conn->query($updateMoney);
 				}
+
+				//give user rewards money
+				$updateQ2 = "UPDATE ".USERS_TABLE." SET money = money + '$reward_money' WHERE id = '$user_id'";
+				$updateResult2 = $this->conn->query($updateQ2);
 			}
 
 		}

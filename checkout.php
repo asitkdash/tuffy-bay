@@ -30,7 +30,7 @@ if (isset($_POST['order_cart']))
 		$tuffy_user->insert_card_info($_SESSION['user']['id'], $card_num, $security_code);
 	}
 
-	$tuffy_inventory->purchase_cart($_SESSION['user']['id'], $cart, $_POST['total_price'], $_POST['payment_method']);
+	$tuffy_inventory->purchase_cart($_SESSION['user']['id'], $cart, $_POST['total_price'], $_POST['payment_method'], $_POST['rewards_amount']);
 	header("Location: http://" .$_SERVER['SERVER_NAME'] . "/orders.php");
 	exit;
 }
@@ -144,12 +144,30 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 			 <span class="total final" id="final-price">$<?php echo $total_price; ?></span>
 			 <div class="clearfix"></div>
 
+			 <!--REWARDS-->
+			 <br>
+			 <div>
+			 	<?php 
+			 		$total_rewards = $total_price * 0.10;
+			 		$total_rewards = number_format((float)$total_rewards, 2, '.', '');
+			 	?>
+			 </div>
+
 			<!--Place order + Payment method-->
 			<?php if ($not_enough_stock): ?>
 			<h3>Not enough in stock</h3>
 			<?php else: ?>
 			<form method = "post">
 				<button class="order" type = "submit" name = "order_cart" style = "border:none">Place Order</button>
+
+				<!--rewards-->
+				<input hidden name="rewards_amount" value = "<?php echo $total_rewards; ?>">
+				<div style = "color:#47aa63;padding-top: 5px; text-align: center"> 
+					<span style = "color: #000; font-size: 20px">Tuffy Rewards</span>
+					<br>
+					<?php echo "Get $".$total_rewards. " Back!"; ?>
+				</div>
+
 				<br>
 				<h4>Choose payment method: </h4>
 				<br>
