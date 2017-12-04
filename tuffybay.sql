@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 27, 2017 at 09:06 PM
+-- Generation Time: Dec 04, 2017 at 09:25 AM
 -- Server version: 5.7.17
 -- PHP Version: 5.6.30
 
@@ -98,15 +98,17 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `money` decimal(10,2) NOT NULL DEFAULT '0.00',
   `credit_card_num` varchar(16) DEFAULT NULL COMMENT 'credit card #',
-  `credit_card_security` int(11) DEFAULT NULL COMMENT 'credit card security code'
+  `credit_card_security` int(11) DEFAULT NULL COMMENT 'credit card security code',
+  `security_question` varchar(128) NOT NULL,
+  `security_answer` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `type`, `email`, `money`, `credit_card_num`, `credit_card_security`) VALUES
-(17, 'admin_user', '$2y$10$ER344izJRe7/OtxMxXXZrezu6cbHEwAESpaF.JjeK3Dd4.rc/HOYu', 1, 'admin_user@tuffybay.com', '26.77', NULL, NULL);
+INSERT INTO `users` (`id`, `username`, `password`, `type`, `email`, `money`, `credit_card_num`, `credit_card_security`, `security_question`, `security_answer`) VALUES
+(17, 'admin_user', '$2y$10$ER344izJRe7/OtxMxXXZrezu6cbHEwAESpaF.JjeK3Dd4.rc/HOYu', 1, 'admin_user@tuffybay.com', '16.95', NULL, NULL, '', '');
 
 -- --------------------------------------------------------
 
@@ -183,7 +185,7 @@ ALTER TABLE `shopping_cart_items`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `wishlists`
 --
