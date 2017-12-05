@@ -26,13 +26,19 @@ include 'functions.php';
   else if (isset($_POST['add_to_wishlist']))
   {
 
-    $hi = $tuffy_inventory->insert_wishlist($_SESSION['user']['id'], $item['id']);
-    var_dump($hi);
+    $tuffy_inventory->insert_wishlist($_SESSION['user']['id'], $item['id']);
+  }
+
+  //image setup
+  $img_file = "/images/item_".$_GET['itemid'].".jpg";
+  if (!file_exists($_SERVER['DOCUMENT_ROOT'].$img_file))
+  {
+    $img_file = "/images/item_default.png";
   }
 
   //HEADER
   $title = $item['name'];
-  $css_files = array();
+  $css_files = array('rating_item_page.css');
   include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 ?>
 
@@ -42,13 +48,13 @@ include 'functions.php';
 			 <li><a href="index.php">Home</a></li>
 			 <li class="active">Products</li>
 		 </ol>
-		 <!-- start content -->
-		 <div class="col-md-9 det">
+		  <!-- start content -->
+		  <div class="col-md-9 det">
 				 <div class="single_left">
 					 <div class="flexslider">
              <ul class="slides">
-               <li data-thumb="https://upload.wikimedia.org/wikipedia/commons/6/6a/A_blank_flag.png">
-                 <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/A_blank_flag.png" />
+               <li data-thumb="<?php echo $img_file; ?>">
+                 <img src="<?php echo $img_file; ?>" />
                </li>
              </ul>
            </div>
@@ -65,6 +71,43 @@ include 'functions.php';
            });
            </script>
 				 </div>
+         <h4>Product rating</h4>
+         <?php $rating = $tuffy_inventory->get_item_rating($item['id']); ?>
+          <fieldset class="rating" style = "padding-right: 5px">
+            <input type="radio" id="star5" name="rating" value="5" <?php if($rating > 4.5){echo "checked";} ?> disabled/>
+            <label class = "full" for="star5" title="Awesome - 5 stars"></label>
+
+            <input type="radio" id="star4half" name="rating" value="4.5" <?php if($rating > 4 && $rating <= 4.5){echo "checked";} ?> disabled/>
+            <label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+
+            <input type="radio" id="star4" name="rating" value="4" <?php if($rating > 3.5 && $rating <= 4){echo "checked";} ?> disabled/>
+            <label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+
+            <input type="radio" id="star3half" name="rating" value="3.5" <?php if($rating > 3 && $rating <= 3.5){echo "checked";} ?> disabled/>
+            <label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+
+            <input type="radio" id="star3" name="rating" value="3" <?php if($rating > 2.5 && $rating <= 3){echo "checked";} ?> disabled/>
+            <label class = "full" for="star3" title="Meh - 3 stars"></label>
+
+            <input type="radio" id="star2half" name="rating" value="2.5" <?php if($rating > 2 && $rating <= 2.5){echo "checked";} ?> disabled/>
+            <label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+
+            <input type="radio" id="star2" name="rating" value="2" <?php if($rating > 1.5 & $rating <= 2){echo "checked";} ?> disabled/>
+            <label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+
+            <input type="radio" id="star1half" name="rating" value="1.5" <?php if($rating > 1 && $rating <= 1.5){echo "checked";} ?> disabled/>
+            <label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+
+            <input type="radio" id="star1" name="rating" value="1" <?php if($rating > 0.5 && $rating <= 1){echo "checked";} ?> disabled/>
+            <label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+
+            <input type="radio" id="starhalf" name="rating" value="0.5" <?php if($rating > 0 && $rating <= 0.5){echo "checked";} ?> disabled/>
+            <label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+          </fieldset>
+          <div style = "padding-top: 10px;font-size: 20px;">
+            ( <span style = "color:#7f7854""><?php echo $rating; ?> / 5.0</span> )
+          </div>
+
 				  <div class="single-right">
 					 <h3><?php echo $item['name']?></h3>
 					 <div class="id"><h4>ID: <?php echo $item['id']?></h4></div>

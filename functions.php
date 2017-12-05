@@ -839,6 +839,79 @@
 		}
 
 
+		//rate item
+		function rate_item($order_id, $item_id, $rating)
+		{
+			//consider the order rated, so that user can only rate once per purchase.
+			$updateQ = "UPDATE ".ORDERS_TABLE." SET rated = 1, personal_rating = '$rating' WHERE id = '$order_id'";
+			$selectResult = $this->conn->query($updateQ);
+
+			//calculate new rating of item (based on average), also add rate count by 1
+			$updateQ2 = "UPDATE ".INVENTORY_TABLE." SET rating = (rating * rate_count + '$rating')/(rate_count + 1), rate_count = rate_count + 1 WHERE id = '$item_id'";
+			$selectResult2 = $this->conn->query($updateQ2);
+
+			if ($updateQ2 && $updateQ)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		function order_rated($order_id)
+		{
+			$selectQ = "SELECT rated FROM ".ORDERS_TABLE." WHERE id = '$order_id'";
+			$selectResult = $this->conn->query($selectQ);
+
+			if ($selectResult->num_rows == 1)
+			{
+				$order_info = mysqli_fetch_assoc($selectResult);
+				$is_rated = $order_info['rated'];
+			}
+			else
+			{
+				return false;
+			}
+
+			if ($is_rated == 1)
+				{return true;}
+			return false;
+		}
+
+		function get_item_rating($item_id)
+		{
+			$selectQ = "SELECT rating FROM ".INVENTORY_TABLE." WHERE id = '$item_id'";
+			$selectResult = $this->conn->query($selectQ);
+
+			if ($selectResult->num_rows == 1)
+			{
+				$item_info = mysqli_fetch_assoc($selectResult);
+			}
+			else
+			{
+				//if error just return 0
+				return 0;
+			}
+
+			return $item_info['rating'];
+		}
+
+		function get_personal_rating($order_id)
+		{
+			$selectQ = "SELECT personal_rating FROM ".ORDERS_TABLE." WHERE id = '$order_id'";
+			$selectResult = $this->conn->query($selectQ);
+
+			if ($selectResult->num_rows == 1)
+			{
+				$item_info = mysqli_fetch_assoc($selectResult);
+			}
+			else
+			{
+				//if error just return 0
+				return 0;
+			}
+
+			return $item_info['personal_rating'];
+		}
 	}
 
 

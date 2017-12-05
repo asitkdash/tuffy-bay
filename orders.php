@@ -10,8 +10,7 @@
 
 	if (isset($_POST['cancel_order']))
 	{
-		$hi = $tuffy_inventory->cancel_order($_POST['order']);
-		echo $hi;
+		$tuffy_inventory->cancel_order($_POST['order']);
 	}
 	
 	$in_delivery_orders = array();

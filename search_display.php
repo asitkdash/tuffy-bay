@@ -22,12 +22,20 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 		<?php elseif ($search_result !== null): ?>
 			<?php foreach($search_result as $item): ?>
 		 	<?php
+
+		 		//link setup
 		 		$item_link = "/item_page.php?itemid=".$item['id']; 
 
+		 		//image setup
+				$img_file = "/images/item_".$item['id'].".jpg";
+				if (!file_exists($_SERVER['DOCUMENT_ROOT'].$img_file))
+				{
+					$img_file = "/images/item_default.png";
+				}
 		 	?>
 			 <div class="col-md-3 feature-grid">
 				<a href="<?php echo $item_link; ?>">
-					<img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/A_blank_flag.png" alt=""/>
+					<img src="<?php echo $img_file; ?>" alt=""/>
 					<div class="arrival-info">
 						<h4></h4>
 						<p><?php echo $item['name']; ?></p>

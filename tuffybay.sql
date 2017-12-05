@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 04, 2017 at 09:25 AM
+-- Generation Time: Dec 05, 2017 at 11:34 PM
 -- Server version: 5.7.17
 -- PHP Version: 5.6.30
 
@@ -31,22 +31,24 @@ CREATE TABLE `inventory` (
   `name` varchar(128) NOT NULL,
   `count` int(11) NOT NULL COMMENT 'number of items in stock',
   `price` decimal(10,2) DEFAULT NULL,
-  `description` text
+  `description` text,
+  `rating` decimal(10,1) NOT NULL DEFAULT '0.0',
+  `rate_count` int(11) NOT NULL DEFAULT '0' COMMENT 'Amount of users that have rated the product'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`id`, `name`, `count`, `price`, `description`) VALUES
-(31, 'Stapler', 90, '5.00', 'a stapler<br>with a sleek design'),
-(32, 'Pen', 44, '2.50', 'A pen'),
-(33, 'Ruler', 82, '2.50', 'A ruler'),
-(34, 'Binder', 499, '1.23', 'A binder'),
-(35, 'College-ruled Paper', 91, '5.00', 'a paper for college'),
-(36, 'Crayons', 98, '2.00', 'has 24 colors'),
-(39, '123', 123, '123.00', 'asd'),
-(40, 'Pencil', 44, '1.50', 'a pencil');
+INSERT INTO `inventory` (`id`, `name`, `count`, `price`, `description`, `rating`, `rate_count`) VALUES
+(31, 'Stapler', 90, '5.00', 'a stapler<br>with a sleek design', '0.0', 0),
+(32, 'Pen', 43, '2.50', 'A pen', '0.0', 0),
+(33, 'Ruler', 82, '2.50', 'A ruler', '0.0', 0),
+(34, 'Binder', 497, '1.23', 'A binder', '0.0', 0),
+(35, 'College-ruled Paper', 89, '5.00', 'a paper for college', '0.0', 0),
+(36, 'Crayons', 87, '2.00', 'has 24 colors', '0.0', 0),
+(39, '123', 122, '123.00', 'asd', '0.0', 0),
+(40, 'Pencil', 43, '1.50', 'a pencil', '0.0', 0);
 
 -- --------------------------------------------------------
 
@@ -68,7 +70,9 @@ CREATE TABLE `ordered_items` (
   `payment_used` varchar(128) NOT NULL,
   `return_request` bit(1) NOT NULL DEFAULT b'0',
   `return_approved` bit(1) NOT NULL DEFAULT b'0',
-  `return_reason` text
+  `return_reason` text,
+  `rated` bit(1) NOT NULL DEFAULT b'0',
+  `personal_rating` decimal(10,1) NOT NULL DEFAULT '0.0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -108,7 +112,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `type`, `email`, `money`, `credit_card_num`, `credit_card_security`, `security_question`, `security_answer`) VALUES
-(17, 'admin_user', '$2y$10$ER344izJRe7/OtxMxXXZrezu6cbHEwAESpaF.JjeK3Dd4.rc/HOYu', 1, 'admin_user@tuffybay.com', '16.95', NULL, NULL, '', '');
+(17, 'admin_user', '$2y$10$ER344izJRe7/OtxMxXXZrezu6cbHEwAESpaF.JjeK3Dd4.rc/HOYu', 1, 'admin_user@tuffybay.com', '9.85', NULL, NULL, '', '');
 
 -- --------------------------------------------------------
 
@@ -170,22 +174,22 @@ ALTER TABLE `wishlists`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 --
 -- AUTO_INCREMENT for table `ordered_items`
 --
 ALTER TABLE `ordered_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 --
 -- AUTO_INCREMENT for table `shopping_cart_items`
 --
 ALTER TABLE `shopping_cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `wishlists`
 --

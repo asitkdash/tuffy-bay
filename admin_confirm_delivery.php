@@ -32,7 +32,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 ?>
 
 <div class = "container-fluid">
-
+<a href="/admin_page.php" class = "btn btn-info" style = "min-width: 50px; margin-left: 10px">Admin Page</a>
+<div style="border: 1px solid #eee;padding: 10px 20px;margin:10px;">
 	<h2>Open orders(in delivery): </h2>
 	<br>
 
@@ -69,6 +70,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 	</div>
 	<?php endforeach;?>
 	</table>
+</div>
 </div>
 
 

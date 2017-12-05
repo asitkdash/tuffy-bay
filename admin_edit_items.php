@@ -60,7 +60,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 			<?php foreach($inventory as $item): ?>
 			<tr>
 				<td><input class="form-check-input" type="checkbox" value="<?php echo $item['id']; ?>" name = "<?php echo 'selected_array['.$index.']'; ?>"></td>
-				<td><a href="/item_page.php?itemid=<?php echo $item['inventory_id'];?>"><?php echo $item['name']?></a></td>
+				<td><a href="/item_page.php?itemid=<?php echo $item['id'];?>"><?php echo $item['name']?></a></td>
 				<td>$<?php echo $item['price']?></td>
 				<td><?php echo $item['count']?></td>
 				<td><?php echo $item['description']?></td>
