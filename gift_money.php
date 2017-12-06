@@ -10,7 +10,6 @@ if(!$tuffy_user->is_loggedin())
 
 if (isset($_POST['user_search']))
 {
-	echo $_POST['user_to_gift'];
 	$found_user = $tuffy_user->check_user_existance($_POST['user_to_gift']);
 }
 else if (isset($_POST['gift_to_user']))
@@ -46,7 +45,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 
 		<?php if (!isset($found_user) || !$found_user): ?>
 			<?php if (isset($found_user) && !$found_user): ?>
-			user not found, try again.
+			<p style = "text-align:center;color:red">user not found, try again.</p>
 			<?php endif; ?>
 		<form method = "post">
 			<div align = "center">

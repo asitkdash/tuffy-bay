@@ -3,7 +3,7 @@
 include 'functions.php';
 
 //if not admin or higher kick them out
-if ($_SESSION['user']['type'] < 1 && !$tuffy_user->is_loggedin())
+if ($_SESSION['user']['type'] < 1 || !$tuffy_user->is_loggedin())
 {
 	header("Location: http://" .$_SERVER['SERVER_NAME']);
 	/* Make sure that code below does not get executed when we redirect. */

@@ -2,7 +2,7 @@
 include 'functions.php';
 
 //if not admin or higher kick them out
-if ($_SESSION['user']['type'] < 1 && !$tuffy_user->is_loggedin())
+if ($_SESSION['user']['type'] < 1 || !$tuffy_user->is_loggedin())
 {
 	header("Location: http://" .$_SERVER['SERVER_NAME']);
 	/* Make sure that code below does not get executed when we redirect. */
@@ -62,15 +62,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 
 </div>
 
-<table class="table">
-		<tr>
-			<th>Name</th>
-			<th>amount</th>
-			<th>Price</th>
-			<th>Description</th>
-			<th>payment method</th>
-			<th>Date ordered</th>
-		</tr>
 
 <?php
 $js_files = array();

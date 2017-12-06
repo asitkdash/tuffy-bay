@@ -3,7 +3,7 @@ include 'functions.php';
 $index = 0;
 
 //if not admin or higher kick them out
-if ($_SESSION['user']['type'] < 1 && !$tuffy_user->is_loggedin())
+if ($_SESSION['user']['type'] < 1 || !$tuffy_user->is_loggedin())
 {
 	header("Location: http://" .$_SERVER['SERVER_NAME']);
 	/* Make sure that code below does not get executed when we redirect. */
@@ -78,7 +78,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/page_modules/html_header.php';
 		<?php endforeach; ?>
 		</table>
 
-		<button type = "submit" name = "return_items">Return items</button>
+		<button type = "submit" name = "return_items">Approve return</button>
 	</form>
 </div>
 

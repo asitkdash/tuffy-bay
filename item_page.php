@@ -36,6 +36,8 @@ include 'functions.php';
     $img_file = "/images/item_default.png";
   }
 
+  $rate_count = $tuffy_inventory->get_num_of_rates($_GET['itemid']);
+
   //HEADER
   $title = $item['name'];
   $css_files = array('rating_item_page.css');
@@ -105,7 +107,7 @@ include 'functions.php';
             <label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
           </fieldset>
           <div style = "padding-top: 10px;font-size: 20px;">
-            ( <span style = "color:#7f7854""><?php echo $rating; ?> / 5.0</span> )
+            ( <span style = "color:#7f7854""><?php echo $rating; ?> / 5.0</span> ) <?php echo "by " .$rate_count. " users "; ?>
           </div>
 
 				  <div class="single-right">
@@ -120,7 +122,7 @@ include 'functions.php';
              </div>
 						 <div class="clearfix"></div>
 					  </div>
-              <small>stock: <?php echo $item['count']?></small>
+              <small style = "font-size: 18px">stock: <?php echo $item['count']?></small>
 
              <?php if ($tuffy_user->is_loggedin()): ?>
               <form method="post">

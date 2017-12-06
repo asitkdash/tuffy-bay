@@ -912,6 +912,24 @@
 
 			return $item_info['personal_rating'];
 		}
+
+		function get_num_of_rates($item_id)
+		{
+			$selectQ = "SELECT rate_count FROM ".INVENTORY_TABLE." WHERE id = '$item_id'";
+			$selectResult = $this->conn->query($selectQ);
+
+			if ($selectResult->num_rows == 1)
+			{
+				$item_info = mysqli_fetch_assoc($selectResult);
+			}
+			else
+			{
+				//if error just return 0
+				return 0;
+			}
+
+			return $item_info['rate_count'];
+		}
 	}
 
 
