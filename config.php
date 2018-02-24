@@ -8,4 +8,7 @@
 	//tables
 	define("USERS_TABLE", "users");
 	define("INVENTORY_TABLE", "inventory");
+	define("SHOPCART_TABLE", "shopping_cart_items");
+	define("ORDERS_TABLE", "ordered_items");
+	define("WISHLIST_TABLE", "wishlists");
 ?>
